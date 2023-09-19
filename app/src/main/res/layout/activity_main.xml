@@ -15,9 +15,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:layout_marginLeft="@dimen/normal_padding_size"
+            android:layout_marginLeft="@dimen/small_padding_size"
             android:layout_marginTop="@dimen/ten_padding_size"
-            android:layout_marginBottom="@dimen/normal_padding_size"
+            android:layout_marginBottom="@dimen/small_padding_size"
             android:gravity="center"
             android:text="@string/app_name"
             android:textColor="@color/text_white"
@@ -31,7 +31,7 @@
         android:layout_height="match_parent"
         android:paddingTop="@dimen/big_padding_size"
         android:paddingBottom="@dimen/very_padding_size"
-        android:paddingHorizontal="@dimen/small_padding_size"
+        android:paddingHorizontal="@dimen/medium_padding_size"
         android:orientation="vertical">
 
         <Button

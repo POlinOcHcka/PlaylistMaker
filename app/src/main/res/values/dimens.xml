@@ -6,9 +6,8 @@
     <dimen name="very_padding_size">28dp</dimen>
     <dimen name="big_padding_size">24dp</dimen>
     <dimen name="text_padding_size">20dp</dimen>
-    <dimen name="medium_padding_size">18dp</dimen>
-    <dimen name="small_padding_size">16dp</dimen>
-    <dimen name="normal_padding_size">12dp</dimen>
+    <dimen name="medium_padding_size">16dp</dimen>
+    <dimen name="small_padding_size">12dp</dimen>
     <dimen name="ten_padding_size">10dp</dimen>
     <dimen name="icon_padding_size">8dp</dimen>
     <dimen name="header_padding_size">4dp</dimen>
