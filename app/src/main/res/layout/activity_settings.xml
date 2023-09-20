@@ -37,18 +37,20 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/big_padding_size"
         android:paddingStart="@dimen/medium_padding_size"
-        android:paddingEnd="@dimen/normal_padding_size"
+        android:paddingEnd="@dimen/medium_padding_size"
         android:orientation="vertical">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingVertical="@dimen/text_padding_size"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="fill"
                 android:layout_gravity="start"
                 android:text="@string/text_dark_mode"
                 android:textColor="@color/text_black"
@@ -57,19 +59,22 @@
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="fill"
                 android:layout_gravity="end"
                 android:importantForAccessibility="no" />
-        </FrameLayout>
+        </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingVertical="@dimen/text_padding_size"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="fill"
                 android:layout_gravity="start"
                 android:text="@string/text_share"
                 android:textColor="@color/text_black"
@@ -78,21 +83,25 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="fill"
                 android:layout_gravity="end"
                 android:background="@color/button_white"
                 android:importantForAccessibility="no"
                 android:src="@drawable/icon_share" />
-        </FrameLayout>
+        </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:paddingVertical="@dimen/text_padding_size"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="fill"
                 android:layout_gravity="start"
                 android:text="@string/text_write"
                 android:textColor="@color/text_black"
@@ -101,21 +110,24 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="fill"
                 android:layout_gravity="end"
                 android:background="@color/button_white"
                 android:importantForAccessibility="no"
                 android:src="@drawable/icon_support" />
-        </FrameLayout>
+        </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingVertical="@dimen/text_padding_size"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="fill"
                 android:layout_gravity="start"
                 android:text="@string/text_agreement"
                 android:textColor="@color/text_black"
@@ -124,11 +136,12 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="fill"
                 android:layout_gravity="end"
                 android:background="@color/button_white"
                 android:importantForAccessibility="no"
                 android:src="@drawable/icon_arrow" />
-        </FrameLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
