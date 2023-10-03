@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSecondary"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/header_padding_size">
+
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            style="@style/SettingsButtonBack"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ten_padding_size"
+            android:layout_marginStart="@dimen/big_padding_size"
+            android:gravity="center"
+            android:text="@string/text_settings"
+            style="@style/SettingsHeader"
+            android:textSize="@dimen/medium_text_size"
+            android:textStyle="bold"
+            android:fontFamily="@font/ys_display_medium"
+            android:textFontWeight="500"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/big_padding_size"
+        android:paddingHorizontal="@dimen/medium_padding_size"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="@style/BoxText">
+
+            <TextView
+                style="@style/SettingsText"
+                android:text="@string/text_dark_mode"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="fill"
+                android:layout_gravity="end"
+                android:importantForAccessibility="no"
+                style="@style/SettingsSwitch"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/share_the_app"
+            style="@style/BoxText">
+
+            <TextView
+                style="@style/SettingsText"
+                android:text="@string/text_share"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="fill"
+                android:layout_gravity="end"
+                style="@style/SettingsIconShare"
+                android:importantForAccessibility="no"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/write_to_support"
+            style="@style/BoxText">
+
+            <TextView
+                style="@style/SettingsText"
+                android:text="@string/text_write"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="fill"
+                android:layout_gravity="end"
+                style="@style/SettingsIconSupport"
+                android:importantForAccessibility="no"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/user_agreement"
+            style="@style/BoxText">
+
+            <TextView
+                style="@style/SettingsText"
+                android:text="@string/text_agreement"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="fill"
+                android:layout_gravity="end"
+                style="@style/SettingsIconArrow"
+                android:importantForAccessibility="no"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

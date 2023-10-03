@@ -12,6 +12,15 @@
         android:theme="@style/Theme.PlaylistMakerFinish"
         tools:targetApi="31">
         <activity
+            android:name=".LibraryActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SearchActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
