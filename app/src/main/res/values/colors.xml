@@ -2,11 +2,32 @@
 <resources>
     <color name="text_black">#1A1B22</color>
     <color name="text_white">#FFFFFFFF</color>
+    <color name="text_gray">#AEAFB4</color>
 
     <color name="button_white">#FFFFFFFF</color>
 
     <color name="background_blue">#3772E7</color>
     <color name="background_white">#FFFFFFFF</color>
+    <color name="background_gray">#E6E8EB</color>
 
     <color name="icon_black">#1A1B22</color>
+    <color name="icon_gray_light">#E6E8EB</color>
+    <color name="icon_gray">#AEAFB4</color>
+
+    <color name="cursor_blue">#3772E7</color>
+
+
+    <color name="night_text_black">#1A1B22</color>
+    <color name="night_text_white">#FFFFFFFF</color>
+
+    <color name="night_button_white">#FFFFFFFF</color>
+    <color name="night_button_black">#1A1B22</color>
+
+    <color name="night_background_black">#1A1B22</color>
+    <color name="night_background_white">#FFFFFFFF</color>
+
+    <color name="night_icon_black">#1A1B22</color>
+    <color name="night_icon_white">#FFFFFF</color>
+    <color name="night_icon_blue">#3772E7</color>
+    <color name="night_icon_blue_light">#9FBBF3</color>
 </resources>
