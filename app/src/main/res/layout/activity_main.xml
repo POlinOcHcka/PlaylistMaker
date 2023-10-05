@@ -70,4 +70,5 @@
             app:iconTint="?attr/colorSecondaryVariant"
             app:iconPadding="@dimen/icon_padding_size"/>
     </LinearLayout>
+
 </LinearLayout>
