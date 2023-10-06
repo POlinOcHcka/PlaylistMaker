@@ -1,6 +1,7 @@
 package com.practicum.playlistmakerfinish
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -14,6 +15,13 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        val back = findViewById<ImageButton>(R.id.button_back)
+
+        back.setOnClickListener {
+            val backIntent = Intent(this, MainActivity::class.java)
+            startActivity(backIntent)
+        }
 
         val search = findViewById<EditText>(R.id.search_string)
 
@@ -53,18 +61,33 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
+        val searchString = findViewById<EditText>(R.id.search_string)
+
+        // Проверяем, есть ли сохраненное состояние (например, при повороте экрана)
+        if (savedInstanceState != null) {
+            val savedSearchText = savedInstanceState.getString("searchText")
+            searchString.setText(savedSearchText)
+        }
+
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+
         val searchEditText = findViewById<EditText>(R.id.search_string)
         val searchText = searchEditText.text.toString()
+
+        // Сохраняем текст поискового запроса в Bundle
         outState.putString("searchText", searchText)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
+
         val searchEditText = findViewById<EditText>(R.id.search_string)
         val searchText = savedInstanceState.getString("searchText")
+
+        // Восстанавливаем текст поискового запроса
         searchEditText.setText(searchText)
     }
 }
