@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/colorSecondary"
     android:orientation="vertical">
 
@@ -15,28 +15,28 @@
 
         <ImageButton
             android:id="@+id/button_back"
-            style="@style/ButtonBack"/>
+            style="@style/ButtonBack" />
 
         <TextView
-            android:text="@string/text_search"
-            style="@style/Header" />
+            style="@style/Header"
+            android:text="@string/text_search" />
     </LinearLayout>
 
-    <FrameLayout
-        style="@style/SearchBox">
+    <FrameLayout style="@style/SearchBox">
 
         <EditText
             android:id="@+id/search_string"
             style="@style/SearchString"
             android:drawableStart="@drawable/icon_search_search"
             android:hint="@string/text_search"
-            tools:ignore="RtlSymmetry"
-            android:textCursorDrawable="@drawable/cursor"/>
+            android:textCursorDrawable="@drawable/cursor"
+            tools:ignore="RtlSymmetry" />
 
         <ImageButton
             android:id="@+id/clear"
             style="@style/Clear"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            tools:visibility="visible" />
     </FrameLayout>
 
 </LinearLayout>
