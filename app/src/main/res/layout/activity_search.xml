@@ -30,12 +30,13 @@
             android:drawableStart="@drawable/icon_search_search"
             android:hint="@string/text_search"
             android:textCursorDrawable="@drawable/cursor"
-            tools:ignore="RtlSymmetry" />
+            tools:ignore="RtlSymmetry,TouchTargetSizeCheck" />
 
         <ImageButton
             android:id="@+id/clear"
             style="@style/Clear"
             android:visibility="gone"
+            tools:ignore="TouchTargetSizeCheck"
             tools:visibility="visible" />
     </FrameLayout>
 

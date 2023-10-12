@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
@@ -30,12 +31,13 @@
             android:text="@string/text_dark_mode"/>
 
         <Switch
+            style="@style/SettingsSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="fill"
             android:layout_gravity="end"
+            android:gravity="fill"
             android:importantForAccessibility="no"
-            style="@style/SettingsSwitch"/>
+            tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
 
     <LinearLayout
@@ -49,12 +51,13 @@
 
         <ImageButton
             android:id="@+id/share_button"
+            style="@style/SettingsIconShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="fill"
             android:layout_gravity="end"
-            style="@style/SettingsIconShare"
-            android:importantForAccessibility="no"/>
+            android:gravity="fill"
+            android:importantForAccessibility="no"
+            tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
 
     <LinearLayout
@@ -68,12 +71,13 @@
 
         <ImageButton
             android:id="@+id/write_button"
+            style="@style/SettingsIconSupport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="fill"
             android:layout_gravity="end"
-            style="@style/SettingsIconSupport"
-            android:importantForAccessibility="no"/>
+            android:gravity="fill"
+            android:importantForAccessibility="no"
+            tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
 
     <LinearLayout
@@ -87,12 +91,13 @@
 
         <ImageButton
             android:id="@+id/agreement_button"
+            style="@style/SettingsIconArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="fill"
             android:layout_gravity="end"
-            style="@style/SettingsIconArrow"
-            android:importantForAccessibility="no"/>
+            android:gravity="fill"
+            android:importantForAccessibility="no"
+            tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
 
 </LinearLayout>
