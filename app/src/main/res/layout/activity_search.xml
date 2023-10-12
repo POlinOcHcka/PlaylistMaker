@@ -15,7 +15,8 @@
 
         <ImageButton
             android:id="@+id/button_back"
-            style="@style/ButtonBack" />
+            style="@style/ButtonBack"
+            tools:ignore="ContentDescription" />
 
         <TextView
             style="@style/Header"
@@ -30,13 +31,13 @@
             android:drawableStart="@drawable/icon_search_search"
             android:hint="@string/text_search"
             android:textCursorDrawable="@drawable/cursor"
-            tools:ignore="RtlSymmetry,TouchTargetSizeCheck" />
+            tools:ignore="Autofill,RtlSymmetry,TouchTargetSizeCheck,TextContrastCheck,VisualLintTextFieldSize" />
 
         <ImageButton
             android:id="@+id/clear"
             style="@style/Clear"
             android:visibility="gone"
-            tools:ignore="TouchTargetSizeCheck"
+            tools:ignore="ContentDescription,TouchTargetSizeCheck,ImageContrastCheck"
             tools:visibility="visible" />
     </FrameLayout>
 

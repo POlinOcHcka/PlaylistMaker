@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
@@ -15,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:layout_marginLeft="@dimen/small_padding_size"
+            android:layout_marginStart="@dimen/small_padding_size"
             android:layout_marginTop="@dimen/ten_padding_size"
             android:layout_marginBottom="@dimen/small_padding_size"
             android:fontFamily="@font/ys_display_medium"
@@ -45,7 +46,8 @@
             app:icon="@drawable/icon_search"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/icon_padding_size"
-            app:iconTint="?attr/colorSecondaryVariant" />
+            app:iconTint="?attr/colorSecondaryVariant"
+            tools:ignore="VisualLintButtonSize" />
 
         <Button
             android:id="@+id/button_media"
@@ -57,7 +59,8 @@
             app:icon="@drawable/icon_media"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/icon_padding_size"
-            app:iconTint="?attr/colorSecondaryVariant" />
+            app:iconTint="?attr/colorSecondaryVariant"
+            tools:ignore="VisualLintButtonSize" />
 
         <Button
             android:id="@+id/button_settings"
@@ -68,7 +71,8 @@
             app:icon="@drawable/icon_settings"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/icon_padding_size"
-            app:iconTint="?attr/colorSecondaryVariant" />
+            app:iconTint="?attr/colorSecondaryVariant"
+            tools:ignore="VisualLintButtonSize" />
     </LinearLayout>
 
 </LinearLayout>

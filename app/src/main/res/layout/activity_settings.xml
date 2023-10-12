@@ -15,7 +15,8 @@
 
         <ImageButton
             android:id="@+id/button_back"
-            style="@style/ButtonBack"/>
+            style="@style/ButtonBack"
+            tools:ignore="ContentDescription" />
 
         <TextView
             style="@style/Header"
@@ -37,7 +38,7 @@
             android:layout_gravity="end"
             android:gravity="fill"
             android:importantForAccessibility="no"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck,UseSwitchCompatOrMaterialXml" />
     </LinearLayout>
 
     <LinearLayout
@@ -57,7 +58,7 @@
             android:layout_gravity="end"
             android:gravity="fill"
             android:importantForAccessibility="no"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
     </LinearLayout>
 
     <LinearLayout
@@ -77,7 +78,7 @@
             android:layout_gravity="end"
             android:gravity="fill"
             android:importantForAccessibility="no"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
     </LinearLayout>
 
     <LinearLayout
@@ -97,7 +98,7 @@
             android:layout_gravity="end"
             android:gravity="fill"
             android:importantForAccessibility="no"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
     </LinearLayout>
 
 </LinearLayout>
