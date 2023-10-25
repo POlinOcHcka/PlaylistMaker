@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
@@ -14,99 +15,90 @@
 
         <ImageButton
             android:id="@+id/button_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            style="@style/SettingsButtonBack"
-            android:importantForAccessibility="no" />
+            style="@style/ButtonBack"
+            tools:ignore="ContentDescription" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ten_padding_size"
-            android:layout_marginStart="@dimen/big_padding_size"
-            android:gravity="center"
-            android:text="@string/text_settings"
-            style="@style/SettingsHeader"
-            android:textSize="@dimen/medium_text_size"
-            android:textStyle="bold"
-            android:fontFamily="@font/ys_display_medium"
-            android:textFontWeight="500"/>
+            style="@style/Header"
+            android:text="@string/text_settings"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/big_padding_size"
-        android:paddingHorizontal="@dimen/medium_padding_size"
-        android:orientation="vertical">
+        android:layout_marginTop="@dimen/big_padding_size"
+        style="@style/BoxText">
 
-        <LinearLayout
-            style="@style/BoxText">
+        <TextView
+            style="@style/SettingsText"
+            android:text="@string/text_dark_mode"/>
 
-            <TextView
-                style="@style/SettingsText"
-                android:text="@string/text_dark_mode"/>
+        <Switch
+            style="@style/SettingsSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:gravity="fill"
+            android:importantForAccessibility="no"
+            tools:ignore="TouchTargetSizeCheck,UseSwitchCompatOrMaterialXml" />
+    </LinearLayout>
 
-            <Switch
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="fill"
-                android:layout_gravity="end"
-                android:importantForAccessibility="no"
-                style="@style/SettingsSwitch"/>
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/share_the_app"
+        style="@style/BoxText">
 
-        <LinearLayout
-            android:id="@+id/share_the_app"
-            style="@style/BoxText">
+        <TextView
+            android:id="@+id/share_string"
+            style="@style/SettingsText"
+            android:text="@string/text_share"/>
 
-            <TextView
-                style="@style/SettingsText"
-                android:text="@string/text_share"/>
+        <ImageButton
+            android:id="@+id/share_button"
+            style="@style/SettingsIconShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:gravity="fill"
+            android:importantForAccessibility="no"
+            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
+    </LinearLayout>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="fill"
-                android:layout_gravity="end"
-                style="@style/SettingsIconShare"
-                android:importantForAccessibility="no"/>
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/write_to_support"
+        style="@style/BoxText">
 
-        <LinearLayout
-            android:id="@+id/write_to_support"
-            style="@style/BoxText">
+        <TextView
+            android:id="@+id/write_string"
+            style="@style/SettingsText"
+            android:text="@string/text_write"/>
 
-            <TextView
-                style="@style/SettingsText"
-                android:text="@string/text_write"/>
+        <ImageButton
+            android:id="@+id/write_button"
+            style="@style/SettingsIconSupport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:gravity="fill"
+            android:importantForAccessibility="no"
+            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
+    </LinearLayout>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="fill"
-                android:layout_gravity="end"
-                style="@style/SettingsIconSupport"
-                android:importantForAccessibility="no"/>
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/user_agreement"
+        style="@style/BoxText">
 
-        <LinearLayout
-            android:id="@+id/user_agreement"
-            style="@style/BoxText">
+        <TextView
+            android:id="@+id/agreement_string"
+            style="@style/SettingsText"
+            android:text="@string/text_agreement"/>
 
-            <TextView
-                style="@style/SettingsText"
-                android:text="@string/text_agreement"/>
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="fill"
-                android:layout_gravity="end"
-                style="@style/SettingsIconArrow"
-                android:importantForAccessibility="no"/>
-        </LinearLayout>
-
+        <ImageButton
+            android:id="@+id/agreement_button"
+            style="@style/SettingsIconArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:gravity="fill"
+            android:importantForAccessibility="no"
+            tools:ignore="TouchTargetSizeCheck,ImageContrastCheck" />
     </LinearLayout>
 
 </LinearLayout>
