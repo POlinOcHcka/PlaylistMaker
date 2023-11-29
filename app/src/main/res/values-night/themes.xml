@@ -104,4 +104,45 @@
         <item name="android:importantForAccessibility">no</item>
         <item name="android:src">@drawable/icon_clear_dark_mode</item>
     </style>
+
+    <style name="NameTrackText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">start</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">@color/night_text_white</item>
+    </style>
+
+    <style name="TinyText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/tiny_text_size</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">@color/night_text_white</item>
+    </style>
+
+    <style name="ButtonTrack">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawableTint">@color/night_icon_white</item>
+        <item name="android:backgroundTint">@color/night_background_black</item>
+        <item name="android:layout_gravity">center|end</item>
+        <item name="android:gravity">fill</item>
+        <item name="android:src">@drawable/icon_arrow_dark_mode</item>
+    </style>
+
+    <style name="IconPoint">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawableTint">@color/night_icon_white</item>
+        <item name="android:backgroundTint">@color/night_background_black</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:src">@drawable/icon_point_dark_mode</item>
+    </style>
+
+
 </resources>
