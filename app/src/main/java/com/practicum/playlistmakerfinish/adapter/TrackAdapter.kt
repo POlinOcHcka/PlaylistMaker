@@ -10,12 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.model.TrackModel
+import java.text.SimpleDateFormat
+import java.util.*
 
-class TrackAdapter: RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
+class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
-    private var trackList = emptyList<TrackModel>()
+    private var trackList = arrayListOf<TrackModel>()
 
-    class TrackViewHolder(view: View):RecyclerView.ViewHolder(view) {
+    class TrackViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val trackName: TextView = itemView.findViewById(R.id.track_name)
         private val artistName: TextView = itemView.findViewById(R.id.artist_name)
@@ -26,7 +28,7 @@ class TrackAdapter: RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
             trackName.text = track.trackName
             artistName.text = track.artistName
-            trackTime.text = track.trackTime
+            trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime)
 
             Glide
                 .with(itemView)
@@ -38,7 +40,8 @@ class TrackAdapter: RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_track_layout, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_track_layout, parent, false)
         return TrackViewHolder(view)
     }
 
@@ -50,9 +53,9 @@ class TrackAdapter: RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
         holder.bind(trackList[position])
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setList(list: List<TrackModel>) {
-        trackList = list
-        notifyDataSetChanged()
+        trackList.clear()
+        trackList.addAll(list)
+        this.notifyDataSetChanged()
     }
 }
