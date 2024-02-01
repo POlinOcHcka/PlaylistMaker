@@ -56,42 +56,42 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_track_layout" />
 
-        <!--        <LinearLayout-->
-        <!--            android:id="@+id/placeholder"-->
-        <!--            style="@style/Placeholder"-->
-        <!--            android:visibility="visible">-->
+                <LinearLayout
+                    android:id="@+id/placeholder"
+                    style="@style/Placeholder"
+                    android:visibility="visible">
 
-        <!--            <ImageView-->
-        <!--                android:id="@+id/placeholderImageNoResults"-->
-        <!--                style="@style/PlaceholderImageView"-->
-        <!--                android:src="@drawable/placeholder_no_results"-->
-        <!--                android:visibility="gone"/>-->
+                    <ImageView
+                        android:id="@+id/placeholderImageNoResults"
+                        style="@style/PlaceholderImageView"
+                        android:src="@drawable/placeholder_no_results"
+                        android:visibility="gone"/>
 
-        <!--            <TextView-->
-        <!--                android:id="@+id/placeholderTextNoResults"-->
-        <!--                style="@style/PlaceholderTextView"-->
-        <!--                android:text="@string/text_no_results"-->
-        <!--                android:visibility="gone"/>-->
+                    <TextView
+                        android:id="@+id/placeholderTextNoResults"
+                        style="@style/PlaceholderTextView"
+                        android:text="@string/text_no_results"
+                        android:visibility="gone"/>
 
-        <!--            <ImageView-->
-        <!--                android:id="@+id/placeholderImageServerError"-->
-        <!--                style="@style/PlaceholderImageView"-->
-        <!--                android:src="@drawable/placeholder_server_error"-->
-        <!--                android:visibility="gone"/>-->
+                    <ImageView
+                        android:id="@+id/placeholderImageServerError"
+                        style="@style/PlaceholderImageView"
+                        android:src="@drawable/placeholder_server_error"
+                        android:visibility="gone"/>
 
-        <!--            <TextView-->
-        <!--                android:id="@+id/placeholderTextServerError"-->
-        <!--                style="@style/PlaceholderTextView"-->
-        <!--                android:text="@string/text_server_error"-->
-        <!--                android:visibility="gone"/>-->
+                    <TextView
+                        android:id="@+id/placeholderTextServerError"
+                        style="@style/PlaceholderTextView"
+                        android:text="@string/text_server_error"
+                        android:visibility="gone"/>
 
-        <!--            <Button-->
-        <!--                android:id="@+id/updateButton"-->
-        <!--                style="@style/PlaceholderButton"-->
-        <!--                android:text="@string/text_update"-->
-        <!--                app:cornerRadius="@dimen/padding_size_54"-->
-        <!--                android:visibility="gone"/>-->
-        <!--        </LinearLayout>-->
+                    <Button
+                        android:id="@+id/updateButton"
+                        style="@style/PlaceholderButton"
+                        android:text="@string/text_update"
+                        app:cornerRadius="@dimen/padding_size_54"
+                        android:visibility="gone"/>
+                </LinearLayout>
 
     </FrameLayout>
 </LinearLayout>
