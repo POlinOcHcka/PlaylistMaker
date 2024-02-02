@@ -24,7 +24,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="@dimen/big_padding_size"
+        android:layout_marginTop="@dimen/padding_size_24"
         style="@style/BoxText">
 
         <TextView

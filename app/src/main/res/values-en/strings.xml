@@ -10,4 +10,7 @@
     <string name="text_agreement">User agreement</string>
     <string name="settings_subject">Message to the developers of the Playlist Maker app</string>
     <string name="settings_message">Thanks to the developers for the cool app!</string>
+    <string name="text_no_results">Nothing was found</string>
+    <string name="text_server_error">Communication problems\n\nThe download failed.\nCheck your internet connection.</string>
+    <string name="text_update">Update</string>
 </resources>
