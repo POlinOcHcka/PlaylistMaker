@@ -32,7 +32,7 @@ import kotlin.collections.ArrayList
 
 class SearchActivity : AppCompatActivity() {
 
-    private val itunesBaseUrl = "https://itunes.apple.com?entity=song"
+    private val itunesBaseUrl = "https://itunes.apple.com"
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesBaseUrl)
