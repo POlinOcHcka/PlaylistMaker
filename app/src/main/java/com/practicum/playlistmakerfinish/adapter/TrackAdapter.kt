@@ -28,7 +28,7 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
         fun bind(track: TrackModel) {
             trackName.text = track.trackName
             artistName.text = track.artistName
-            trackTime.text = formatTrackDuration(track.trackTime)
+            trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
             Glide
                 .with(itemView)
@@ -37,17 +37,10 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
                 .placeholder(R.drawable.placeholder)
                 .into(url)
         }
-
-        private fun formatTrackDuration(trackTimeMillis: Long): String {
-            val minutes = TimeUnit.MILLISECONDS.toMinutes(trackTimeMillis)
-            val seconds = TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) % 60
-            return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_track_layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_track_layout, parent, false)
         return TrackViewHolder(view)
     }
 
