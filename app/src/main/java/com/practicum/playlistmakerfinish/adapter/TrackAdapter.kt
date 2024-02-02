@@ -12,6 +12,7 @@ import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.model.TrackModel
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
@@ -25,10 +26,9 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
         private val url: ImageView = itemView.findViewById(R.id.artworkUrl100)
 
         fun bind(track: TrackModel) {
-
             trackName.text = track.trackName
             artistName.text = track.artistName
-            trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTime)
+            trackTime.text = formatTrackDuration(track.trackTime)
 
             Glide
                 .with(itemView)
@@ -36,6 +36,12 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
                 .centerCrop()
                 .placeholder(R.drawable.placeholder)
                 .into(url)
+        }
+
+        private fun formatTrackDuration(trackTimeMillis: Long): String {
+            val minutes = TimeUnit.MILLISECONDS.toMinutes(trackTimeMillis)
+            val seconds = TimeUnit.MILLISECONDS.toSeconds(trackTimeMillis) % 60
+            return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
         }
     }
 
@@ -56,6 +62,6 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     fun setList(list: List<TrackModel>) {
         trackList.clear()
         trackList.addAll(list)
-        this.notifyDataSetChanged()
+        notifyDataSetChanged()
     }
 }

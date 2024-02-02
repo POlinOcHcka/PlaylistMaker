@@ -63,8 +63,7 @@
 
                     <ImageView
                         android:id="@+id/placeholderImageNoResults"
-                        style="@style/PlaceholderImageView"
-                        android:src="@drawable/placeholder_no_results"
+                        style="@style/PlaceholderImageNoResults"
                         android:visibility="gone"/>
 
                     <TextView
@@ -75,8 +74,7 @@
 
                     <ImageView
                         android:id="@+id/placeholderImageServerError"
-                        style="@style/PlaceholderImageView"
-                        android:src="@drawable/placeholder_server_error"
+                        style="@style/PlaceholderImageServerError"
                         android:visibility="gone"/>
 
                     <TextView
