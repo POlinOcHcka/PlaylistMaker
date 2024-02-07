@@ -10,12 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.model.TrackModel
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
 
-class TrackAdapter: RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
+class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
-    private var trackList = emptyList<TrackModel>()
+    private var trackList = arrayListOf<TrackModel>()
 
-    class TrackViewHolder(view: View):RecyclerView.ViewHolder(view) {
+    class TrackViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val trackName: TextView = itemView.findViewById(R.id.track_name)
         private val artistName: TextView = itemView.findViewById(R.id.artist_name)
@@ -23,10 +26,9 @@ class TrackAdapter: RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
         private val url: ImageView = itemView.findViewById(R.id.artworkUrl100)
 
         fun bind(track: TrackModel) {
-
             trackName.text = track.trackName
             artistName.text = track.artistName
-            trackTime.text = track.trackTime
+            trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
             Glide
                 .with(itemView)
@@ -50,9 +52,9 @@ class TrackAdapter: RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
         holder.bind(trackList[position])
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setList(list: List<TrackModel>) {
-        trackList = list
+        trackList.clear()
+        trackList.addAll(list)
         notifyDataSetChanged()
     }
 }

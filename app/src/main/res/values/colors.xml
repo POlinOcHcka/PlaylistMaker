@@ -5,6 +5,7 @@
     <color name="text_gray">#AEAFB4</color>
 
     <color name="button_white">#FFFFFFFF</color>
+    <color name="button_black">#1A1B22</color>
 
     <color name="background_blue">#3772E7</color>
     <color name="background_white">#FFFFFFFF</color>

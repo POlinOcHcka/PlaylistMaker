@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="medium_text_size">22sp</dimen>
-    <dimen name="small_text_size">16sp</dimen>
-    <dimen name="tiny_text_size">11sp</dimen>
+    <dimen name="text_size_22">22sp</dimen>
+    <dimen name="text_size_19">19sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_11">11sp</dimen>
 
-    <dimen name="very_padding_size">28dp</dimen>
-    <dimen name="big_padding_size">24dp</dimen>
-    <dimen name="text_padding_size">20dp</dimen>
-    <dimen name="medium_padding_size">16dp</dimen>
-    <dimen name="small_padding_size">12dp</dimen>
-    <dimen name="ten_padding_size">10dp</dimen>
+    <dimen name="padding_size_54">54dp</dimen>
+    <dimen name="padding_size_28">28dp</dimen>
+    <dimen name="padding_size_24">24dp</dimen>
+    <dimen name="padding_size_20">20dp</dimen>
+    <dimen name="padding_size_16">16dp</dimen>
+    <dimen name="padding_size_12">12dp</dimen>
+    <dimen name="padding_size_10">10dp</dimen>
     <dimen name="icon_padding_size">8dp</dimen>
     <dimen name="header_padding_size">4dp</dimen>
+
 </resources>
