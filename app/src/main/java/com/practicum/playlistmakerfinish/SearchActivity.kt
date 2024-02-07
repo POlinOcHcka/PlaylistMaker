@@ -1,8 +1,7 @@
 package com.practicum.playlistmakerfinish
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -26,9 +25,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 class SearchActivity : AppCompatActivity() {
 
@@ -48,41 +44,29 @@ class SearchActivity : AppCompatActivity() {
 
     lateinit var queryInput: EditText
 
-    lateinit var placeholder: LinearLayout
-    lateinit var placeholderImageNoResults: ImageView
-    lateinit var placeholderTextNoResults: TextView
-    lateinit var placeholderImageServerError: ImageView
-    lateinit var placeholderTextServerError: TextView
+    lateinit var placeholderNoResults: LinearLayout
+    lateinit var placeholderServerError: LinearLayout
     lateinit var updateButton: Button
+
 
     fun showTrackList() {
         recyclerView.visibility = View.VISIBLE
-        placeholderImageNoResults.visibility = View.GONE
-        placeholderTextNoResults.visibility = View.GONE
-        placeholderImageServerError.visibility = View.GONE
-        placeholderTextServerError.visibility = View.GONE
-        placeholder.visibility = View.GONE
-        updateButton.visibility = View.GONE
+        placeholderNoResults.visibility = View.GONE
+        placeholderServerError.visibility = View.GONE
     }
 
     // Обработка успешного запроса без результатов
     fun showNoResultsPlaceholder() {
-        placeholderImageNoResults.visibility = View.VISIBLE
-        placeholderTextNoResults.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-        placeholderImageServerError.visibility = View.GONE
-        placeholderTextServerError.visibility = View.GONE
-        updateButton.visibility = View.GONE
+        placeholderNoResults.visibility = View.VISIBLE
+        placeholderServerError.visibility = View.GONE
     }
 
     // Обработка ошибки сервера
     fun showServerErrorPlaceholder() {
-        placeholderImageNoResults.visibility = View.GONE
-        placeholderTextNoResults.visibility = View.GONE
         recyclerView.visibility = View.GONE
-        placeholderImageServerError.visibility = View.VISIBLE
-        placeholderTextServerError.visibility = View.VISIBLE
-        updateButton.visibility = View.VISIBLE
+        placeholderNoResults.visibility = View.GONE
+        placeholderServerError.visibility = View.VISIBLE
 
         // Добавить слушатель на кнопку "Обновить"
         updateButton.setOnClickListener {
@@ -90,6 +74,8 @@ class SearchActivity : AppCompatActivity() {
             performSearch()
         }
     }
+
+    private var trackList = arrayListOf<TrackModel>()
 
     fun searchTrack() {
         itunes.search(queryInput.text.toString()).enqueue(object : Callback<TrackResponse> {
@@ -99,6 +85,7 @@ class SearchActivity : AppCompatActivity() {
             ) {
                 if (response.code() == 200) {
                     if (response.body()?.results?.isNotEmpty() == true) {
+                        trackList.clear()
                         adapter.setList(response.body()?.results!!)
                         showTrackList()
                     } else {
@@ -117,8 +104,9 @@ class SearchActivity : AppCompatActivity() {
 
     // Дополнительная функция для скрытия плейсхолдера и отображения элементов загрузки
     fun hidePlaceholder() {
-        placeholder.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
+        placeholderNoResults.visibility = View.GONE
+        placeholderServerError.visibility = View.GONE
     }
 
     fun performSearch() {
@@ -128,6 +116,7 @@ class SearchActivity : AppCompatActivity() {
         searchTrack()
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -136,11 +125,8 @@ class SearchActivity : AppCompatActivity() {
 
         queryInput = findViewById(R.id.search_string)
 
-        placeholder = findViewById(R.id.placeholder)
-        placeholderImageNoResults = findViewById(R.id.placeholderImageNoResults)
-        placeholderTextNoResults = findViewById(R.id.placeholderTextNoResults)
-        placeholderImageServerError = findViewById(R.id.placeholderImageServerError)
-        placeholderTextServerError = findViewById(R.id.placeholderTextServerError)
+        placeholderNoResults = findViewById(R.id.placeholderNoResults)
+        placeholderServerError = findViewById(R.id.placeholderServerError)
         updateButton = findViewById(R.id.updateButton)
 
         queryInput.setOnEditorActionListener { _, actionId, _ ->
@@ -155,27 +141,24 @@ class SearchActivity : AppCompatActivity() {
             startActivity(backIntent)
         }
 
-        val search = findViewById<EditText>(R.id.search_string)
 
-        search.setOnFocusChangeListener { _, hasFocus ->
+        queryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(search, InputMethodManager.SHOW_IMPLICIT)
+                imm.showSoftInput(queryInput, InputMethodManager.SHOW_IMPLICIT)
             }
         }
 
-
-        val searchString = findViewById<EditText>(R.id.search_string)
         val clearButton = findViewById<ImageButton>(R.id.clear)
 
         clearButton.setOnClickListener {
-            searchString.text.clear() // Очистить текстовое поле
+            queryInput.text.clear() // Очистить текстовое поле
             clearButton.visibility = View.GONE // Скрыть кнопку (x)
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(searchString.windowToken, 0) // Скрыть клавиатуру
+            imm.hideSoftInputFromWindow(queryInput.windowToken, 0) // Скрыть клавиатуру
         }
 
-        searchString.addTextChangedListener(object : TextWatcher {
+        queryInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // Ничего не делать
             }
@@ -194,16 +177,14 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-        val searchEditText = findViewById<EditText>(R.id.search_string)
-
         // Проверяем, есть ли сохраненное состояние (Bundle savedInstanceState)
         if (savedInstanceState != null) {
             searchText = savedInstanceState.getString("searchText", "")
-            searchEditText.setText(searchText)
+            queryInput.setText(searchText)
         }
 
         // Добавляем TextWatcher для отслеживания изменений текста в EditText
-        searchEditText.addTextChangedListener(object : TextWatcher {
+        queryInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // Ничего не делаем перед изменением текста
             }

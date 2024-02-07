@@ -56,40 +56,37 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_track_layout" />
 
-                <LinearLayout
-                    android:id="@+id/placeholder"
-                    style="@style/Placeholder"
-                    android:visibility="visible">
+        <LinearLayout
+            android:id="@+id/placeholderNoResults"
+            style="@style/Placeholder"
+            android:visibility="gone">
 
-                    <ImageView
-                        android:id="@+id/placeholderImageNoResults"
-                        style="@style/PlaceholderImageNoResults"
-                        android:visibility="gone"/>
+            <ImageView
+                style="@style/PlaceholderImageNoResults"/>
 
-                    <TextView
-                        android:id="@+id/placeholderTextNoResults"
-                        style="@style/PlaceholderTextView"
-                        android:text="@string/text_no_results"
-                        android:visibility="gone"/>
+            <TextView
+                style="@style/PlaceholderTextView"
+                android:text="@string/text_no_results" />
+        </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/placeholderImageServerError"
-                        style="@style/PlaceholderImageServerError"
-                        android:visibility="gone"/>
+        <LinearLayout
+            android:id="@+id/placeholderServerError"
+            style="@style/Placeholder"
+            android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/placeholderTextServerError"
-                        style="@style/PlaceholderTextView"
-                        android:text="@string/text_server_error"
-                        android:visibility="gone"/>
+            <ImageView
+                style="@style/PlaceholderImageServerError"/>
 
-                    <Button
-                        android:id="@+id/updateButton"
-                        style="@style/PlaceholderButton"
-                        android:text="@string/text_update"
-                        app:cornerRadius="@dimen/padding_size_54"
-                        android:visibility="gone"/>
-                </LinearLayout>
+            <TextView
+                style="@style/PlaceholderTextView"
+                android:text="@string/text_server_error"/>
+
+            <Button
+                android:id="@+id/updateButton"
+                style="@style/PlaceholderButton"
+                android:text="@string/text_update"
+                app:cornerRadius="@dimen/padding_size_54"/>
+        </LinearLayout>
 
     </FrameLayout>
 </LinearLayout>
