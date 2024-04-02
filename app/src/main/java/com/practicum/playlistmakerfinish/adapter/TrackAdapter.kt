@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.practicum.playlistmakerfinish.R
+import com.practicum.playlistmakerfinish.SharedPreferences.SearchHistory
 import com.practicum.playlistmakerfinish.model.TrackModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +17,8 @@ import java.util.concurrent.TimeUnit
 
 class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
-    private var trackList = arrayListOf<TrackModel>()
+    private lateinit var trackList: MutableList<TrackModel>
+    private lateinit var searchHistory: SearchHistory
 
     class TrackViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -49,7 +51,11 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(trackList[position])
+        val track = trackList[position]
+        holder.bind(track)
+        holder.itemView.setOnClickListener {
+            searchHistory.saveTrack(mutableListOf(track))
+        }
     }
 
     fun setList(list: List<TrackModel>) {

@@ -13,4 +13,9 @@
         <item name="android:statusBarColor">@color/background_blue</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="SettingsSwitch" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:thumbTint">@color/icon_gray</item>
+        <item name="android:trackTint">@color/icon_gray_light</item>
+    </style>
 </resources>

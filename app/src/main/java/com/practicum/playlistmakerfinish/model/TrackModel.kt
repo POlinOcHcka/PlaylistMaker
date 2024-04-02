@@ -1,6 +1,7 @@
 package com.practicum.playlistmakerfinish.model
 
 class TrackModel (
+    val trackId: Int,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Long,
