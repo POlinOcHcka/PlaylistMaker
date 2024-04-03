@@ -52,7 +52,7 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        val track = trackList[position]
+        val track = trackList!![position]
         holder.bind(track)
         holder.itemView.setOnClickListener {
             searchHistory.saveTrack(mutableListOf(track))
