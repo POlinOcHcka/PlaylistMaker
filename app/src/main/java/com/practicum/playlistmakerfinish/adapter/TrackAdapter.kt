@@ -18,7 +18,7 @@ import kotlin.collections.ArrayList
 
 class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
-    private var trackList: ArrayList<TrackModel>? = null
+    private val trackList: MutableList<TrackModel> = mutableListOf()
     private lateinit var searchHistory: SearchHistory
 
     class TrackViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -48,20 +48,20 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return trackList!!.size
+        return trackList.size
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        val track = trackList!![position]
+        val track = trackList[position]
         holder.bind(track)
         holder.itemView.setOnClickListener {
             searchHistory.saveTrack(mutableListOf(track))
         }
     }
 
-    fun setList(list: ArrayList<TrackModel>) {
-        trackList!!.clear()
-        trackList!!.addAll(list)
+    fun setList(list: MutableList<TrackModel>) {
+        trackList.clear()
+        trackList.addAll(list)
         notifyDataSetChanged()
     }
 }

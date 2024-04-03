@@ -54,8 +54,7 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var historyAdapter: TrackAdapter
     private lateinit var searchHistory: SearchHistory
-    private lateinit var historyTracks: ArrayList<TrackModel>
-    private var trackList: ArrayList<TrackModel>?= null
+    private lateinit var historyTracks: MutableList<TrackModel>
 
 
     fun showTrackList() {
@@ -87,8 +86,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-
-
     fun searchTrack() {
         itunes.search(queryInput.text.toString()).enqueue(object : Callback<TrackResponse> {
             override fun onResponse(
@@ -97,7 +94,6 @@ class SearchActivity : AppCompatActivity() {
             ) {
                 if (response.code() == 200) {
                     if (response.body()?.results?.isNotEmpty() == true) {
-                        trackList!!.clear()
                         adapter.setList(response.body()?.results!!)
                         showTrackList()
                     } else {
@@ -147,7 +143,7 @@ class SearchActivity : AppCompatActivity() {
         queryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && queryInput.text.isEmpty()) {
                 val historyTracks = searchHistory.readTracks().toList()
-                historyAdapter.setList(historyTracks as ArrayList<TrackModel>)
+                historyAdapter.setList(historyTracks as MutableList<TrackModel>)
                 searchHistoryLayout.visibility = if (historyTracks.isNotEmpty()) View.VISIBLE else View.GONE
             } else {
                 searchHistoryLayout.visibility = View.GONE
