@@ -14,10 +14,11 @@ import com.practicum.playlistmakerfinish.model.TrackModel
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
-    private lateinit var trackList: MutableList<TrackModel>
+    private var trackList: ArrayList<TrackModel>? = null
     private lateinit var searchHistory: SearchHistory
 
     class TrackViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -47,7 +48,7 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return trackList.size
+        return trackList!!.size
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
@@ -58,9 +59,9 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
         }
     }
 
-    fun setList(list: List<TrackModel>) {
-        trackList.clear()
-        trackList.addAll(list)
+    fun setList(list: ArrayList<TrackModel>) {
+        trackList!!.clear()
+        trackList!!.addAll(list)
         notifyDataSetChanged()
     }
 }

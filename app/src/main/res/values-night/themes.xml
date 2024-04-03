@@ -62,9 +62,9 @@
         <item name="android:textColor">@color/night_text_white</item>
     </style>
 
-    <style name="SettingsSwitch" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:thumbTint">@color/night_icon_blue</item>
-        <item name="android:trackTint">@color/night_icon_blue_light</item>
+    <style name="SettingsSwitch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/night_icon_blue</item>
+        <item name="android:colorForeground">@color/night_icon_blue_light</item>
     </style>
 
     <style name="SearchBox">

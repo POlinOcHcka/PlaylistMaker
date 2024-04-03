@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmakerfinish.SharedPreferences.App
 
@@ -25,11 +26,11 @@ class SettingsActivity() : AppCompatActivity() {
             startActivity(backIntent)
         }
 
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        val themeSwitcher = findViewById<SwitchCompat>(R.id.themeSwitcher)
 
         themeSwitcher.isChecked = (applicationContext as App).darkTheme
 
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+        themeSwitcher.setOnCheckedChangeListener {switcher, checked ->
             (applicationContext as App).switchTheme(checked)
         }
 

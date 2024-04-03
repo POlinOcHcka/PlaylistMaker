@@ -30,7 +30,7 @@
             style="@style/SettingsText"
             android:text="@string/text_dark_mode"/>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/themeSwitcher"
             android:theme="@style/SettingsSwitch"
             android:layout_width="wrap_content"

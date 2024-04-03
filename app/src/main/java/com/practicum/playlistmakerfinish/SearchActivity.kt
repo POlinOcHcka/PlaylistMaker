@@ -54,7 +54,7 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var historyAdapter: TrackAdapter
     private lateinit var searchHistory: SearchHistory
-    private lateinit var historyTracks: MutableList<TrackModel>
+    private lateinit var historyTracks: ArrayList<TrackModel>
 
 
     fun showTrackList() {
@@ -86,7 +86,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private var trackList = arrayListOf<TrackModel>()
+    private var trackList = ArrayList<TrackModel>()
 
     fun searchTrack() {
         itunes.search(queryInput.text.toString()).enqueue(object : Callback<TrackResponse> {
@@ -142,9 +142,6 @@ class SearchActivity : AppCompatActivity() {
 
         searchHistoryLayout = findViewById(R.id.searchHistory)
         searchHistoryLayout.visibility = View.GONE
-
-        val historyString = getSharedPreferences(SEARCH_HISTORY_KEY, MODE_PRIVATE)
-        val history = SearchHistory(historyString)
 
         queryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && queryInput.text.isEmpty()) {

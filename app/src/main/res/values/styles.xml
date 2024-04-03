@@ -70,6 +70,11 @@
         <item name="android:textColor">@color/text_black</item>
     </style>
 
+    <style name="SettingsSwitch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/icon_gray</item>
+        <item name="android:colorForeground">@color/icon_gray_light</item>
+    </style>
+
     <style name="SearchBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
