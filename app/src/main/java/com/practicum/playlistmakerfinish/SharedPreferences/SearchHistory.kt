@@ -2,6 +2,7 @@ package com.practicum.playlistmakerfinish.SharedPreferences
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmakerfinish.model.TrackModel
 
 const val SEARCH_HISTORY_KEY = "search_history"
@@ -29,9 +30,10 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
             .apply()
     }
 
-    fun readTracks(): Array<TrackModel> {
-        val json = sharedPreferences.getString(SEARCH_HISTORY_KEY, null) ?: return emptyArray()
-        return Gson().fromJson(json, Array<TrackModel>::class.java)
+    fun readTracks(): MutableList<TrackModel> {
+        val json = sharedPreferences.getString(SEARCH_HISTORY_KEY, null) ?: return mutableListOf()
+        val arrayType = object : TypeToken<MutableList<TrackModel>>() {}.type
+        return Gson().fromJson(json, arrayType)
     }
 
     fun clearTracks() {

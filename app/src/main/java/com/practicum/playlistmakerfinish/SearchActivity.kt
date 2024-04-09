@@ -39,22 +39,24 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchText: String = "" // Глобальная переменная для хранения текста поискового запроса
 
-    lateinit var adapter: TrackAdapter
-    lateinit var recyclerView: RecyclerView
+    private var back: ImageButton = findViewById(R.id.button_back)
 
-    lateinit var queryInput: EditText
+    private var recyclerView: RecyclerView = findViewById(R.id.rvTrack)
+    private var adapter: TrackAdapter = TrackAdapter()
+    private var queryInput: EditText = findViewById(R.id.search_string)
+    private var clearButton: ImageButton = findViewById(R.id.clear)
 
-    lateinit var placeholderNoResults: LinearLayout
-    lateinit var placeholderServerError: LinearLayout
-    lateinit var updateButton: Button
+    private var placeholderNoResults: LinearLayout = findViewById(R.id.placeholderNoResults)
+    private var placeholderServerError: LinearLayout = findViewById(R.id.placeholderServerError)
+    private var updateButton: Button = findViewById(R.id.updateButton)
 
-    private lateinit var searchHistoryLayout: LinearLayout
-    private lateinit var tracksHistoryRv: RecyclerView
-    private lateinit var clearHistoryButton: Button
+    private var tracksHistoryRv: RecyclerView = findViewById(R.id.rvTrackHistory)
+    private var historyAdapter: TrackAdapter = TrackAdapter()
 
-    private lateinit var historyAdapter: TrackAdapter
+    private var searchHistoryLayout: LinearLayout = findViewById(R.id.searchHistory)
     private lateinit var searchHistory: SearchHistory
     private lateinit var historyTracks: MutableList<TrackModel>
+    private var clearHistoryButton: Button = findViewById(R.id.clearTrackHistory)
 
 
     fun showTrackList() {
@@ -129,15 +131,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val back = findViewById<ImageButton>(R.id.button_back)
-
-        queryInput = findViewById(R.id.search_string)
-
-        placeholderNoResults = findViewById(R.id.placeholderNoResults)
-        placeholderServerError = findViewById(R.id.placeholderServerError)
-        updateButton = findViewById(R.id.updateButton)
-
-        searchHistoryLayout = findViewById(R.id.searchHistory)
         searchHistoryLayout.visibility = View.GONE
 
         queryInput.setOnFocusChangeListener { _, hasFocus ->
@@ -170,8 +163,6 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        val clearButton = findViewById<ImageButton>(R.id.clear)
-
         clearButton.setOnClickListener {
             queryInput.text.clear() // Очистить текстовое поле
             clearButton.visibility = View.GONE // Скрыть кнопку (x)
@@ -179,7 +170,6 @@ class SearchActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(queryInput.windowToken, 0) // Скрыть клавиатуру
         }
 
-        clearHistoryButton = findViewById(R.id.clearTrackHistory)
         clearHistoryButton.setOnClickListener {
             historyTracks.clear()
             searchHistory.clearTracks()
@@ -233,17 +223,9 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun initial() {
-        recyclerView = findViewById(R.id.rvTrack)
-        adapter = TrackAdapter()
-        recyclerView.adapter = adapter
-    }
+    private fun initial() {recyclerView.adapter = adapter}
 
-    private fun initialHistory() {
-        tracksHistoryRv = findViewById(R.id.rvTrackHistory)
-        historyAdapter = TrackAdapter()
-        tracksHistoryRv.adapter = adapter
-    }
+    private fun initialHistory() {tracksHistoryRv.adapter = adapter}
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
