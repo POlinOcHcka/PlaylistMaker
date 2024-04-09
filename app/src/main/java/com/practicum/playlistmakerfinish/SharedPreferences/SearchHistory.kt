@@ -10,15 +10,13 @@ const val MAX_SIZE = 10
 
 class SearchHistory(private val sharedPreferences: SharedPreferences) {
 
-    fun saveTrack(track: MutableList<TrackModel>) {
+    fun saveTrack(track: TrackModel) {
 
         val searchHistory = readTracks().toMutableList()
 
-        searchHistory.removeAll {existingTrack ->
-            track.any {it.trackId == existingTrack.trackId }
-        }
+        searchHistory.removeAll {it.trackId == track.trackId}
 
-        searchHistory.addAll(0, track)
+        searchHistory.addAll(0, listOf(track))
 
         if (searchHistory.size > MAX_SIZE) {
             searchHistory.removeAt(MAX_SIZE)
