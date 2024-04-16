@@ -9,16 +9,35 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.practicum.playlistmakerfinish.R
-import com.practicum.playlistmakerfinish.SharedPreferences.SearchHistory
 import com.practicum.playlistmakerfinish.model.TrackModel
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
     private val trackList: MutableList<TrackModel> = mutableListOf()
+
+    var onTrackClickListener: ((TrackModel) -> Unit)? = null
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_track_layout, parent, false)
+        return TrackViewHolder(view)
+    }
+
+    override fun getItemCount(): Int {
+        return trackList.size
+    }
+
+    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
+        holder.bind(trackList[position])
+        holder.itemView.setOnClickListener {onTrackClickListener?.invoke(trackList[position])}
+    }
+
+    fun setList(list: MutableList<TrackModel>) {
+        trackList.clear()
+        trackList.addAll(list)
+        notifyDataSetChanged()
+    }
 
     class TrackViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -39,24 +58,5 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
                 .placeholder(R.drawable.placeholder)
                 .into(url)
         }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_track_layout, parent, false)
-        return TrackViewHolder(view)
-    }
-
-    override fun getItemCount(): Int {
-        return trackList.size
-    }
-
-    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(trackList[position])
-    }
-
-    fun setList(list: MutableList<TrackModel>) {
-        trackList.clear()
-        trackList.addAll(list)
-        notifyDataSetChanged()
     }
 }

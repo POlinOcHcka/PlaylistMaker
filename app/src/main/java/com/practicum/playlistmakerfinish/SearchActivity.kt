@@ -54,8 +54,6 @@ class SearchActivity : AppCompatActivity() {
     private var historyAdapter: TrackAdapter = TrackAdapter()
 
     private var searchHistoryLayout: LinearLayout = findViewById(R.id.searchHistory)
-    private lateinit var searchHistory: SearchHistory
-    private lateinit var historyTracks: MutableList<TrackModel>
     private var clearHistoryButton: Button = findViewById(R.id.clearTrackHistory)
 
 
@@ -133,6 +131,11 @@ class SearchActivity : AppCompatActivity() {
 
         searchHistoryLayout.visibility = View.GONE
 
+        val sharedPrefs = getSharedPreferences(SEARCH_HISTORY_KEY, MODE_PRIVATE)
+        val searchHistory = SearchHistory(sharedPrefs)
+
+        adapter.onTrackClickListener = {track ->searchHistory.saveTrack(track)}
+
         queryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && queryInput.text.isEmpty()) {
                 val historyTracks = searchHistory.readTracks().toList()
@@ -171,9 +174,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         clearHistoryButton.setOnClickListener {
-            historyTracks.clear()
             searchHistory.clearTracks()
-            searchHistory.saveTrack(historyTracks)
             searchHistoryLayout.visibility = View.GONE
         }
 
