@@ -39,23 +39,18 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchText: String = "" // Глобальная переменная для хранения текста поискового запроса
 
-    private var back: ImageButton = findViewById(R.id.button_back)
-
-    private var recyclerView: RecyclerView = findViewById(R.id.rvTrack)
-    private var adapter: TrackAdapter = TrackAdapter()
-    private var queryInput: EditText = findViewById(R.id.search_string)
-    private var clearButton: ImageButton = findViewById(R.id.clear)
-
-    private var placeholderNoResults: LinearLayout = findViewById(R.id.placeholderNoResults)
-    private var placeholderServerError: LinearLayout = findViewById(R.id.placeholderServerError)
-    private var updateButton: Button = findViewById(R.id.updateButton)
-
-    private var tracksHistoryRv: RecyclerView = findViewById(R.id.rvTrackHistory)
-    private var historyAdapter: TrackAdapter = TrackAdapter()
-
-    private var searchHistoryLayout: LinearLayout = findViewById(R.id.searchHistory)
-    private var clearHistoryButton: Button = findViewById(R.id.clearTrackHistory)
-
+    private lateinit var back: ImageButton
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: TrackAdapter
+    private lateinit var queryInput: EditText
+    private lateinit var clearButton: ImageButton
+    private lateinit var placeholderNoResults: LinearLayout
+    private lateinit var placeholderServerError: LinearLayout
+    private lateinit var updateButton: Button
+    private lateinit var tracksHistoryRv: RecyclerView
+    private lateinit var historyAdapter: TrackAdapter
+    private lateinit var searchHistoryLayout: LinearLayout
+    private lateinit var clearHistoryButton: Button
 
     fun showTrackList() {
         recyclerView.visibility = View.VISIBLE
@@ -129,12 +124,25 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        back = findViewById(R.id.button_back_search)
+        recyclerView = findViewById(R.id.rvTrack)
+        adapter = TrackAdapter()
+        queryInput = findViewById(R.id.search_string)
+        clearButton = findViewById(R.id.clear)
+        placeholderNoResults = findViewById(R.id.placeholderNoResults)
+        placeholderServerError = findViewById(R.id.placeholderServerError)
+        updateButton = findViewById(R.id.updateButton)
+        tracksHistoryRv = findViewById(R.id.rvTrackHistory)
+        historyAdapter = TrackAdapter()
+        searchHistoryLayout = findViewById(R.id.searchHistory)
+        clearHistoryButton = findViewById(R.id.clearTrackHistory)
+
         searchHistoryLayout.visibility = View.GONE
 
         val sharedPrefs = getSharedPreferences(SEARCH_HISTORY_KEY, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPrefs)
 
-        adapter.onTrackClickListener = {track ->searchHistory.saveTrack(track)}
+        historyAdapter.onTrackClickListener = {track->searchHistory.saveTrack(track)}
 
         queryInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && queryInput.text.isEmpty()) {
@@ -226,7 +234,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initial() {recyclerView.adapter = adapter}
 
-    private fun initialHistory() {tracksHistoryRv.adapter = adapter}
+    private fun initialHistory() {tracksHistoryRv.adapter = historyAdapter}
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

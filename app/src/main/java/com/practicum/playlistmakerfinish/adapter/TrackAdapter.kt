@@ -1,6 +1,7 @@
 package com.practicum.playlistmakerfinish.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,8 +30,12 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(trackList[position])
-        holder.itemView.setOnClickListener {onTrackClickListener?.invoke(trackList[position])}
+        if (position in trackList.indices) {
+            holder.bind(trackList[position])
+            holder.itemView.setOnClickListener {
+                Log.d("TrackAdapter", "Track clicked: ${trackList[position]}")
+                onTrackClickListener?.invoke(trackList[position])}
+        }
     }
 
     fun setList(list: MutableList<TrackModel>) {
