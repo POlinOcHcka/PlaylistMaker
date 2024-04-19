@@ -150,15 +150,24 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryLayout.visibility = View.GONE
 
         queryInput.setOnFocusChangeListener { _, hasFocus ->
-            Log.d("SearchHistory", "hasFocus")
-            if (hasFocus && queryInput.text.isEmpty()) {
-                val historyTracks = searchHistory.readTracks().toList()
-                historyAdapter.setList(historyTracks as MutableList<TrackModel>)
-                searchHistoryLayout.visibility = if (historyTracks.isNotEmpty()) View.VISIBLE else View.GONE
-            } else {
-                searchHistoryLayout.visibility = View.GONE
+            Log.d("SearchHistory", "hasFocus: $hasFocus")
+
+            if (hasFocus) {
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(queryInput, InputMethodManager.SHOW_IMPLICIT)
+
+                if (queryInput.text.isEmpty()) {
+                    val historyTracks = searchHistory.readTracks().toList()
+                    val mutableHistoryTracks = mutableListOf<TrackModel>()
+                    mutableHistoryTracks.addAll(historyTracks)
+                    historyAdapter.setList(mutableHistoryTracks)
+                    searchHistoryLayout.visibility = if (historyTracks.isNotEmpty()) View.VISIBLE else View.GONE
+                } else {
+                    searchHistoryLayout.visibility = View.GONE
+                }
+
+                Log.d("SearchHistory", "Show history")
             }
-            Log.d("SearchHistory", "Show history")
         }
 
         queryInput.setOnEditorActionListener { _, actionId, _ ->
@@ -171,14 +180,6 @@ class SearchActivity : AppCompatActivity() {
         back.setOnClickListener {
             val backIntent = Intent(this, MainActivity::class.java)
             startActivity(backIntent)
-        }
-
-
-        queryInput.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(queryInput, InputMethodManager.SHOW_IMPLICIT)
-            }
         }
 
         clearButton.setOnClickListener {

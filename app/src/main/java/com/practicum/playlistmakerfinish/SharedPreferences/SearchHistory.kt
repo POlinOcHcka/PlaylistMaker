@@ -34,8 +34,8 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
     fun readTracks(): MutableList<TrackModel> {
         val json = sharedPreferences.getString(SEARCH_HISTORY_KEY, null) ?: return mutableListOf()
         val arrayType = object : TypeToken<MutableList<TrackModel>>() {}.type
-        return Gson().fromJson(json, arrayType)
         Log.d("SearchHistory", "Track read")
+        return Gson().fromJson(json, arrayType)
     }
 
     fun clearTracks() {
