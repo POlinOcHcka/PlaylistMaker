@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -137,14 +138,19 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryLayout = findViewById(R.id.searchHistory)
         clearHistoryButton = findViewById(R.id.clearTrackHistory)
 
-        searchHistoryLayout.visibility = View.GONE
-
         val sharedPrefs = getSharedPreferences(SEARCH_HISTORY_KEY, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPrefs)
 
-        historyAdapter.onTrackClickListener = {track->searchHistory.saveTrack(track)}
+        adapter.onTrackClickListener = {track->searchHistory.saveTrack(track)
+            Log.d("SearchActivity", "Track saved to history: $track")}
+
+        historyAdapter.onTrackClickListener = {track->searchHistory.saveTrack(track)
+            Log.d("SearchActivity", "Track saved to history: $track")}
+
+        searchHistoryLayout.visibility = View.GONE
 
         queryInput.setOnFocusChangeListener { _, hasFocus ->
+            Log.d("SearchHistory", "hasFocus")
             if (hasFocus && queryInput.text.isEmpty()) {
                 val historyTracks = searchHistory.readTracks().toList()
                 historyAdapter.setList(historyTracks as MutableList<TrackModel>)
@@ -152,6 +158,7 @@ class SearchActivity : AppCompatActivity() {
             } else {
                 searchHistoryLayout.visibility = View.GONE
             }
+            Log.d("SearchHistory", "Show history")
         }
 
         queryInput.setOnEditorActionListener { _, actionId, _ ->
@@ -177,6 +184,7 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             queryInput.text.clear() // Очистить текстовое поле
             clearButton.visibility = View.GONE // Скрыть кнопку (x)
+            recyclerView.visibility = View.GONE
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(queryInput.windowToken, 0) // Скрыть клавиатуру
         }
