@@ -8,6 +8,9 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.practicum.playlistmakerfinish.SharedPreferences.App
 
 class SettingsActivity() : AppCompatActivity() {
 
@@ -16,11 +19,19 @@ class SettingsActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val back = findViewById<ImageButton>(R.id.button_back)
+        val back = findViewById<ImageButton>(R.id.button_back_settings)
 
         back.setOnClickListener {
             val backIntent = Intent(this, MainActivity::class.java)
             startActivity(backIntent)
+        }
+
+        val themeSwitcher = findViewById<SwitchCompat>(R.id.themeSwitcher)
+
+        themeSwitcher.isChecked = (applicationContext as App).darkTheme
+
+        themeSwitcher.setOnCheckedChangeListener {switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
 
         val share = findViewById<LinearLayout>(R.id.share_the_app)

@@ -7,9 +7,12 @@
     <dimen name="text_size_11">11sp</dimen>
 
     <dimen name="padding_size_54">54dp</dimen>
+    <dimen name="padding_size_32">32dp</dimen>
     <dimen name="padding_size_28">28dp</dimen>
     <dimen name="padding_size_24">24dp</dimen>
     <dimen name="padding_size_20">20dp</dimen>
+    <dimen name="padding_size_19">19dp</dimen>
+    <dimen name="padding_size_18">18dp</dimen>
     <dimen name="padding_size_16">16dp</dimen>
     <dimen name="padding_size_12">12dp</dimen>
     <dimen name="padding_size_10">10dp</dimen>
