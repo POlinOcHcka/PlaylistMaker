@@ -15,4 +15,9 @@
     <string name="text_update">Update</string>
     <string name="you_looking_for">You looking for</string>
     <string name="clear_the_history">Clear the history</string>
+    <string name="time">Duration</string>
+    <string name="album">Album</string>
+    <string name="year">Year</string>
+    <string name="genre">Genre</string>
+    <string name="country">Country</string>
 </resources>

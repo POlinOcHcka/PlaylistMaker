@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/header_padding_size">
+        android:padding="@dimen/size_4">
 
         <ImageButton
             android:id="@+id/button_back_settings"
@@ -23,7 +23,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="@dimen/padding_size_24"
+        android:layout_marginTop="@dimen/size_24"
         style="@style/BoxText">
 
         <TextView

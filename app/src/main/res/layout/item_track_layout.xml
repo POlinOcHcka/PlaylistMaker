@@ -15,9 +15,9 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/icon_padding_size"
-            android:layout_marginStart="@dimen/padding_size_16"
-            android:layout_marginEnd="@dimen/icon_padding_size"
+            android:layout_marginVertical="@dimen/size_8"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_8"
             app:cardCornerRadius="2dp">
 
             <ImageView
@@ -69,7 +69,7 @@
 
         <ImageButton
             style="@style/ButtonTrack"
-            android:layout_marginEnd="@dimen/padding_size_16"
+            android:layout_marginEnd="@dimen/size_16"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     </LinearLayout>
