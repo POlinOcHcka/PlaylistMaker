@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.practicum.playlistmakerfinish.SharedPreferences.SEARCH_HISTORY_KEY
 import com.practicum.playlistmakerfinish.SharedPreferences.SearchHistory
 import com.practicum.playlistmakerfinish.adapter.TrackAdapter
@@ -141,11 +142,19 @@ class SearchActivity : AppCompatActivity() {
         val sharedPrefs = getSharedPreferences(SEARCH_HISTORY_KEY, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPrefs)
 
-        adapter.onTrackClickListener = {track->searchHistory.saveTrack(track)
-            Log.d("SearchActivity", "Track saved to history: $track")}
+        adapter.onTrackClickListener = { track ->
+            searchHistory.saveTrack(track)
+            val playerIntent = Intent(this, PlayerActivity::class.java)
+            playerIntent.putExtra(SEARCH_HISTORY_KEY, Gson().toJson(track))
+            startActivity(playerIntent)
+        }
 
-        historyAdapter.onTrackClickListener = {track->searchHistory.saveTrack(track)
-            Log.d("SearchActivity", "Track saved to history: $track")}
+        historyAdapter.onTrackClickListener = { track ->
+            searchHistory.saveTrack(track)
+            val playerIntent = Intent(this, PlayerActivity::class.java)
+            playerIntent.putExtra(SEARCH_HISTORY_KEY, Gson().toJson(track))
+            startActivity(playerIntent)
+        }
 
         searchHistoryLayout.visibility = View.GONE
 
@@ -238,7 +247,6 @@ class SearchActivity : AppCompatActivity() {
 
         initial()
         initialHistory()
-
     }
 
     private fun initial() {recyclerView.adapter = adapter}

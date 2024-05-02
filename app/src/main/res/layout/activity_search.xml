@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/header_padding_size">
+        android:padding="@dimen/size_4">
 
         <ImageButton
             android:id="@+id/button_back_search"
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/padding_size_32"
+                android:paddingTop="@dimen/size_32"
                 android:visibility="visible">
 
                 <TextView
@@ -70,7 +70,7 @@
                     android:id="@+id/rvTrackHistory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_size_24"
+                    android:layout_marginTop="@dimen/size_24"
                     android:orientation="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_track_layout"
@@ -83,7 +83,7 @@
                     style="@style/PlaceholderButton"
                     android:text="@string/clear_the_history"
                     android:visibility="visible"
-                    app:cornerRadius="@dimen/padding_size_54">
+                    app:cornerRadius="@dimen/size_54">
                 </Button>
             </LinearLayout>
         </ScrollView>
@@ -94,7 +94,7 @@
             android:id="@+id/rvTrack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_size_24"
+            android:layout_marginTop="@dimen/size_24"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_track_layout"
@@ -129,7 +129,7 @@
                 android:id="@+id/updateButton"
                 style="@style/PlaceholderButton"
                 android:text="@string/text_update"
-                app:cornerRadius="@dimen/padding_size_54"/>
+                app:cornerRadius="@dimen/size_54"/>
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

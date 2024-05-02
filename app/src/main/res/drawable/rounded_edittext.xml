@@ -5,8 +5,8 @@
 
     <solid android:color="@color/background_gray"/>
     <corners
-        android:bottomRightRadius="@dimen/icon_padding_size"
-        android:bottomLeftRadius="@dimen/icon_padding_size"
-        android:topLeftRadius="@dimen/icon_padding_size"
-        android:topRightRadius="@dimen/icon_padding_size"/>
+        android:bottomRightRadius="@dimen/size_8"
+        android:bottomLeftRadius="@dimen/size_8"
+        android:topLeftRadius="@dimen/size_8"
+        android:topRightRadius="@dimen/size_8"/>
 </shape>
