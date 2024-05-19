@@ -237,11 +237,4 @@
         <item name="android:background">@drawable/icon_like_dark_mode</item>
     </style>
 
-    <style name="ProgressBar">
-        <item name="android:indeterminateTint">@color/night_progress_bar</item>
-        <item name="android:layout_width">@dimen/size_44</item>
-        <item name="android:layout_height">@dimen/size_44</item>
-        <item name="android:layout_gravity">center</item>
-    </style>
-
 </resources>
