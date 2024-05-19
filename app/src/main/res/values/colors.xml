@@ -17,6 +17,8 @@
 
     <color name="cursor_blue">#3772E7</color>
 
+    <color name="progress_bar">#1A1B22</color>
+
 
     <color name="night_text_black">#1A1B22</color>
     <color name="night_text_white">#FFFFFFFF</color>
@@ -31,4 +33,6 @@
     <color name="night_icon_white">#FFFFFF</color>
     <color name="night_icon_blue">#3772E7</color>
     <color name="night_icon_blue_light">#9FBBF3</color>
+
+    <color name="night_progress_bar">#FFFFFFFF</color>
 </resources>
