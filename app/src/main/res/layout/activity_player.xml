@@ -68,10 +68,10 @@
 
     <ImageButton
         android:id="@+id/button_play"
+        style="@style/ButtonPlay"
         android:layout_width="@dimen/size_84"
         android:layout_height="@dimen/size_84"
         android:layout_marginTop="@dimen/size_38"
-        android:background="@color/background_white"
         app:layout_constraintTop_toBottomOf="@id/artist_name"
         app:layout_constraintBottom_toTopOf="@id/track_time"
         app:layout_constraintStart_toEndOf="@id/left_border"

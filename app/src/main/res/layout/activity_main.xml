@@ -46,7 +46,7 @@
             app:icon="@drawable/icon_search"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/size_8"
-            app:iconTint="?attr/colorSecondaryVariant"
+            app:iconTint="@color/icon_black"
             tools:ignore="VisualLintButtonSize" />
 
         <Button
@@ -59,7 +59,7 @@
             app:icon="@drawable/icon_media"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/size_8"
-            app:iconTint="?attr/colorSecondaryVariant"
+            app:iconTint="@color/icon_black"
             tools:ignore="VisualLintButtonSize" />
 
         <Button
@@ -71,7 +71,7 @@
             app:icon="@drawable/icon_settings"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/size_8"
-            app:iconTint="?attr/colorSecondaryVariant"
+            app:iconTint="@color/icon_black"
             tools:ignore="VisualLintButtonSize" />
     </LinearLayout>
 
