@@ -47,6 +47,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/size_44"
+            android:layout_height="@dimen/size_44"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/progress_bar"
+            android:visibility="gone"/>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
