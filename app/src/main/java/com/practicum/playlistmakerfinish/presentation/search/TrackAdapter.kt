@@ -1,6 +1,5 @@
-package com.practicum.playlistmakerfinish.adapter
+package com.practicum.playlistmakerfinish.presentation.search
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +9,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.practicum.playlistmakerfinish.R
-import com.practicum.playlistmakerfinish.model.TrackModel
+import com.practicum.playlistmakerfinish.domain.model.Track
 import java.text.SimpleDateFormat
 import java.util.*
 
 class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
-    private val trackList: MutableList<TrackModel> = mutableListOf()
+    private val trackList: MutableList<Track> = mutableListOf()
 
-    var onTrackClickListener: ((TrackModel) -> Unit)? = null
+    var onTrackClickListener: ((Track) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_track_layout, parent, false)
@@ -38,7 +37,7 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
         }
     }
 
-    fun setList(list: MutableList<TrackModel>) {
+    fun setList(list: MutableList<Track>) {
         trackList.clear()
         trackList.addAll(list)
         notifyDataSetChanged()
@@ -51,10 +50,10 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
         private val trackTime: TextView = itemView.findViewById(R.id.track_time)
         private val url: ImageView = itemView.findViewById(R.id.artworkUrl100)
 
-        fun bind(track: TrackModel) {
-            trackName.text = track.trackName
+        fun bind(track: Track) {
+            trackName.text = track.name
             artistName.text = track.artistName
-            trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+            trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.timeMillis)
 
             Glide
                 .with(itemView)

@@ -1,9 +1,13 @@
-package com.practicum.playlistmakerfinish
+package com.practicum.playlistmakerfinish.presentation.main
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.practicum.playlistmakerfinish.R
+import com.practicum.playlistmakerfinish.presentation.search.SearchActivity
+import com.practicum.playlistmakerfinish.presentation.settings.SettingsActivity
+import com.practicum.playlistmakerfinish.presentation.library.LibraryActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

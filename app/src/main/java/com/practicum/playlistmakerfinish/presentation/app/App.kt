@@ -1,4 +1,4 @@
-package com.practicum.playlistmakerfinish.SharedPreferences
+package com.practicum.playlistmakerfinish.presentation.app
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate

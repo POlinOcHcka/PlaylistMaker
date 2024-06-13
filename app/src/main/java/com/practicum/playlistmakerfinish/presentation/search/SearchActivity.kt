@@ -1,6 +1,5 @@
-package com.practicum.playlistmakerfinish
+package com.practicum.playlistmakerfinish.presentation.search
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,12 +18,11 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.practicum.playlistmakerfinish.SharedPreferences.SEARCH_HISTORY_KEY
-import com.practicum.playlistmakerfinish.SharedPreferences.SearchHistory
-import com.practicum.playlistmakerfinish.adapter.TrackAdapter
-import com.practicum.playlistmakerfinish.api.ItunesAPI
-import com.practicum.playlistmakerfinish.model.TrackModel
-import com.practicum.playlistmakerfinish.response.TrackResponse
+import com.practicum.playlistmakerfinish.R
+import com.practicum.playlistmakerfinish.data.dto.TrackSearchResponse
+import com.practicum.playlistmakerfinish.data.network.ItunesAPI
+import com.practicum.playlistmakerfinish.domain.model.Track
+import com.practicum.playlistmakerfinish.presentation.player.PlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -115,7 +113,7 @@ class SearchActivity : AppCompatActivity() {
 
                 if (queryInput.text.isEmpty()) {
                     val historyTracks = searchHistory.readTracks().toList()
-                    val mutableHistoryTracks = mutableListOf<TrackModel>()
+                    val mutableHistoryTracks = mutableListOf<Track>()
                     mutableHistoryTracks.addAll(historyTracks)
                     historyAdapter.setList(mutableHistoryTracks)
                     searchHistoryLayout.visibility = if (historyTracks.isNotEmpty()) View.VISIBLE else View.GONE
@@ -181,12 +179,12 @@ class SearchActivity : AppCompatActivity() {
     private fun performSearch() {
         progressBar.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-        itunes.search(queryInput.text.toString()).enqueue(object : Callback<TrackResponse> {
-            override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
+        itunes.search(queryInput.text.toString()).enqueue(object : Callback<TrackSearchResponse> {
+            override fun onResponse(call: Call<TrackSearchResponse>, response: Response<TrackSearchResponse>) {
                 progressBar.visibility = View.GONE
                 if (response.code() == 200) {
                     if (response.body()?.results?.isNotEmpty() == true) {
-                        adapter.setList(response.body()?.results!!)
+                        mutableListOf(response.body()?.results!!)
                         showTrackList()
                     } else {
                         showNoResultsPlaceholder()
@@ -196,7 +194,7 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+            override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
                 progressBar.visibility = View.GONE
                 showServerErrorPlaceholder()
             }
