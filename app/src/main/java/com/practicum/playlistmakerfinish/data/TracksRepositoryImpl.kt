@@ -14,7 +14,7 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
         if (response.resultCode == 200) {
             return (response as TrackSearchResponse).results.map { it.toDomainModel() }
         } else {
-            return emptyList()
+            throw Exception("Server error with code: ${response.resultCode}")
         }
     }
 }

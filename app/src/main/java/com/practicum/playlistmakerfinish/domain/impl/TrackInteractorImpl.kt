@@ -9,7 +9,12 @@ class TrackInteractorImpl(private val repository: TracksRepository) : TrackInter
 
     override fun searchTracks(expression: String, consumer: TrackInteractor.TrackConsumer) {
         executor.execute {
-            consumer.consume(repository.searchTracks(expression))
+            try {
+                val tracks = repository.searchTracks(expression)
+                consumer.consume(tracks)
+            } catch (e: Exception) {
+                consumer.onFailure()
+            }
         }
     }
 }

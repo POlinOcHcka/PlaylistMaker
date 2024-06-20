@@ -18,9 +18,11 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.practicum.playlistmakerfinish.Creator
 import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.data.dto.TrackSearchResponse
 import com.practicum.playlistmakerfinish.data.network.ItunesAPI
+import com.practicum.playlistmakerfinish.domain.api.TrackInteractor
 import com.practicum.playlistmakerfinish.domain.model.Track
 import com.practicum.playlistmakerfinish.presentation.player.PlayerActivity
 import retrofit2.Call
@@ -64,6 +66,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchHistoryLayout: LinearLayout
     private lateinit var clearHistoryButton: Button
     private lateinit var progressBar: ProgressBar
+    private lateinit var trackInteractor: TrackInteractor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +85,7 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryLayout = findViewById(R.id.searchHistory)
         clearHistoryButton = findViewById(R.id.clearTrackHistory)
         progressBar = findViewById(R.id.progressBar)
+        trackInteractor = Creator.provideTrackInteractor()
 
         val sharedPrefs = getSharedPreferences(SEARCH_HISTORY_KEY, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPrefs)
@@ -179,24 +183,26 @@ class SearchActivity : AppCompatActivity() {
     private fun performSearch() {
         progressBar.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-        itunes.search(queryInput.text.toString()).enqueue(object : Callback<TrackSearchResponse> {
-            override fun onResponse(call: Call<TrackSearchResponse>, response: Response<TrackSearchResponse>) {
-                progressBar.visibility = View.GONE
-                if (response.code() == 200) {
-                    if (response.body()?.results?.isNotEmpty() == true) {
-                        mutableListOf(response.body()?.results!!)
+        val query = queryInput.text.toString()
+
+        trackInteractor.searchTracks(query, object : TrackInteractor.TrackConsumer {
+            override fun consume(foundTracks: List<Track>) {
+                runOnUiThread {
+                    progressBar.visibility = View.GONE
+                    if (foundTracks.isNotEmpty()) {
+                        adapter.setList(foundTracks)
                         showTrackList()
                     } else {
                         showNoResultsPlaceholder()
                     }
-                } else {
-                    showServerErrorPlaceholder()
                 }
             }
 
-            override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
-                progressBar.visibility = View.GONE
-                showServerErrorPlaceholder()
+            override fun onFailure() {
+                runOnUiThread {
+                    progressBar.visibility = View.GONE
+                    showServerErrorPlaceholder()
+                }
             }
         })
     }

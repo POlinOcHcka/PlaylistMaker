@@ -1,14 +1,16 @@
 package com.practicum.playlistmakerfinish.data.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class TrackDto (
-    val trackId: Int,
-    val trackName: String,
-    val trackArtistName: String,
-    val trackTimeMillis: Long,
-    val trackArtworkUrl100: String,
-    val trackCollectionName: String,
-    val trackReleaseDate: String,
-    val trackPrimaryGenreName: String,
-    val trackCountry: String,
-    val trackPreviewUrl: String
+    @SerializedName("trackId") val trackId: Int,
+    @SerializedName("trackName") val trackName: String,
+    @SerializedName("artistName") val trackArtistName: String,
+    @SerializedName("trackTimeMillis") val trackTimeMillis: Long,
+    @SerializedName("artworkUrl100") val trackArtworkUrl100: String,
+    @SerializedName("collectionName") val trackCollectionName: String,
+    @SerializedName("releaseDate") val trackReleaseDate: String,
+    @SerializedName("primaryGenreName") val trackPrimaryGenreName: String,
+    @SerializedName("country") val trackCountry: String,
+    @SerializedName("previewUrl") val trackPreviewUrl: String
     )

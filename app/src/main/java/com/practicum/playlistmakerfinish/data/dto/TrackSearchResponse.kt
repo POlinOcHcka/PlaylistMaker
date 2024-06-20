@@ -1,3 +1,5 @@
 package com.practicum.playlistmakerfinish.data.dto
 
-class TrackSearchResponse(val results: ArrayList<TrackDto>) : Response()
+import com.google.gson.annotations.SerializedName
+
+class TrackSearchResponse(@SerializedName("results") val results: ArrayList<TrackDto>) : Response()

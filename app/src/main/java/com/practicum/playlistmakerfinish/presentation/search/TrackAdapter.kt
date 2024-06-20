@@ -37,7 +37,7 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
         }
     }
 
-    fun setList(list: MutableList<Track>) {
+    fun setList(list: List<Track>) {
         trackList.clear()
         trackList.addAll(list)
         notifyDataSetChanged()
