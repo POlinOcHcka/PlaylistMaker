@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import com.practicum.playlistmakerfinish.R
-import com.practicum.playlistmakerfinish.presentation.app.App
+import com.practicum.playlistmakerfinish.presentation.App
 
 class SettingsActivity() : AppCompatActivity() {
 

@@ -6,7 +6,7 @@ import com.practicum.playlistmakerfinish.domain.api.TrackInteractor
 import com.practicum.playlistmakerfinish.domain.api.TracksRepository
 import com.practicum.playlistmakerfinish.domain.impl.TrackInteractorImpl
 
-object Creator {
+object ServiceLocator {
     private fun getTrackRepository(): TracksRepository {
         return TracksRepositoryImpl(RetrofitNetworkClient())
     }

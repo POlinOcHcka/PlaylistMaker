@@ -18,29 +18,14 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.practicum.playlistmakerfinish.Creator
+import com.practicum.playlistmakerfinish.ServiceLocator
 import com.practicum.playlistmakerfinish.R
-import com.practicum.playlistmakerfinish.data.dto.TrackSearchResponse
-import com.practicum.playlistmakerfinish.data.network.ItunesAPI
+import com.practicum.playlistmakerfinish.data.SharedPreferencesSearchHistoryRepository
 import com.practicum.playlistmakerfinish.domain.api.TrackInteractor
 import com.practicum.playlistmakerfinish.domain.model.Track
 import com.practicum.playlistmakerfinish.presentation.player.PlayerActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
-
-    private val itunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val itunes = retrofit.create(ItunesAPI::class.java)
 
     private var searchText: String = ""
 
@@ -85,10 +70,10 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryLayout = findViewById(R.id.searchHistory)
         clearHistoryButton = findViewById(R.id.clearTrackHistory)
         progressBar = findViewById(R.id.progressBar)
-        trackInteractor = Creator.provideTrackInteractor()
+        trackInteractor = ServiceLocator.provideTrackInteractor()
 
         val sharedPrefs = getSharedPreferences(SEARCH_HISTORY_KEY, MODE_PRIVATE)
-        val searchHistory = SearchHistory(sharedPrefs)
+        val searchHistory = SharedPreferencesSearchHistoryRepository(sharedPrefs)
 
         adapter.onTrackClickListener = { track ->
             if (clickDebounce()) {

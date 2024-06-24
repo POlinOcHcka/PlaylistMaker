@@ -1,4 +1,4 @@
-package com.practicum.playlistmakerfinish.presentation.app
+package com.practicum.playlistmakerfinish.presentation
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
