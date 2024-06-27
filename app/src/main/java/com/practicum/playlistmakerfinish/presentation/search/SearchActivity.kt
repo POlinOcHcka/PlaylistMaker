@@ -1,6 +1,5 @@
-package com.practicum.playlistmakerfinish
+package com.practicum.playlistmakerfinish.presentation.search
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,28 +18,14 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.practicum.playlistmakerfinish.SharedPreferences.SEARCH_HISTORY_KEY
-import com.practicum.playlistmakerfinish.SharedPreferences.SearchHistory
-import com.practicum.playlistmakerfinish.adapter.TrackAdapter
-import com.practicum.playlistmakerfinish.api.ItunesAPI
-import com.practicum.playlistmakerfinish.model.TrackModel
-import com.practicum.playlistmakerfinish.response.TrackResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.practicum.playlistmakerfinish.ServiceLocator
+import com.practicum.playlistmakerfinish.R
+import com.practicum.playlistmakerfinish.data.SharedPreferencesSearchHistoryRepository
+import com.practicum.playlistmakerfinish.domain.api.TrackInteractor
+import com.practicum.playlistmakerfinish.domain.model.Track
+import com.practicum.playlistmakerfinish.presentation.player.PlayerActivity
 
 class SearchActivity : AppCompatActivity() {
-
-    private val itunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val itunes = retrofit.create(ItunesAPI::class.java)
 
     private var searchText: String = ""
 
@@ -66,6 +51,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchHistoryLayout: LinearLayout
     private lateinit var clearHistoryButton: Button
     private lateinit var progressBar: ProgressBar
+    private lateinit var trackInteractor: TrackInteractor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,9 +70,10 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryLayout = findViewById(R.id.searchHistory)
         clearHistoryButton = findViewById(R.id.clearTrackHistory)
         progressBar = findViewById(R.id.progressBar)
+        trackInteractor = ServiceLocator.provideTrackInteractor()
 
         val sharedPrefs = getSharedPreferences(SEARCH_HISTORY_KEY, MODE_PRIVATE)
-        val searchHistory = SearchHistory(sharedPrefs)
+        val searchHistory = SharedPreferencesSearchHistoryRepository(sharedPrefs)
 
         adapter.onTrackClickListener = { track ->
             if (clickDebounce()) {
@@ -115,7 +102,7 @@ class SearchActivity : AppCompatActivity() {
 
                 if (queryInput.text.isEmpty()) {
                     val historyTracks = searchHistory.readTracks().toList()
-                    val mutableHistoryTracks = mutableListOf<TrackModel>()
+                    val mutableHistoryTracks = mutableListOf<Track>()
                     mutableHistoryTracks.addAll(historyTracks)
                     historyAdapter.setList(mutableHistoryTracks)
                     searchHistoryLayout.visibility = if (historyTracks.isNotEmpty()) View.VISIBLE else View.GONE
@@ -181,24 +168,26 @@ class SearchActivity : AppCompatActivity() {
     private fun performSearch() {
         progressBar.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-        itunes.search(queryInput.text.toString()).enqueue(object : Callback<TrackResponse> {
-            override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
-                progressBar.visibility = View.GONE
-                if (response.code() == 200) {
-                    if (response.body()?.results?.isNotEmpty() == true) {
-                        adapter.setList(response.body()?.results!!)
+        val query = queryInput.text.toString()
+
+        trackInteractor.searchTracks(query, object : TrackInteractor.TrackConsumer {
+            override fun consume(foundTracks: List<Track>) {
+                runOnUiThread {
+                    progressBar.visibility = View.GONE
+                    if (foundTracks.isNotEmpty()) {
+                        adapter.setList(foundTracks)
                         showTrackList()
                     } else {
                         showNoResultsPlaceholder()
                     }
-                } else {
-                    showServerErrorPlaceholder()
                 }
             }
 
-            override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                progressBar.visibility = View.GONE
-                showServerErrorPlaceholder()
+            override fun onFailure() {
+                runOnUiThread {
+                    progressBar.visibility = View.GONE
+                    showServerErrorPlaceholder()
+                }
             }
         })
     }

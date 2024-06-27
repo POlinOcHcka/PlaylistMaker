@@ -1,14 +1,14 @@
-package com.practicum.playlistmakerfinish.model
+package com.practicum.playlistmakerfinish.domain.model
 
-class TrackModel (
-    val trackId: Int,
-    val trackName: String,
+data class Track (
+    val id: Int,
+    val name: String,
     val artistName: String,
-    val trackTimeMillis: Long,
+    val timeMillis: Long,
     val artworkUrl100: String,
     val collectionName: String,
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
     val previewUrl: String
-    )
+)

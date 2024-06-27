@@ -1,4 +1,4 @@
-package com.practicum.playlistmakerfinish
+package com.practicum.playlistmakerfinish.presentation.settings
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -9,8 +9,8 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
-import com.google.android.material.switchmaterial.SwitchMaterial
-import com.practicum.playlistmakerfinish.SharedPreferences.App
+import com.practicum.playlistmakerfinish.R
+import com.practicum.playlistmakerfinish.presentation.App
 
 class SettingsActivity() : AppCompatActivity() {
 
