@@ -1,10 +1,12 @@
 package com.practicum.playlistmakerfinish.search.ui
 
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -18,10 +20,11 @@ import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.practicum.playlistmakerfinish.ServiceLocator
+import com.practicum.playlistmakerfinish.ServiceLocator.ServiceLocator
 import com.practicum.playlistmakerfinish.R
-import com.practicum.playlistmakerfinish.search.data.SharedPreferencesSearchHistoryRepository
 import com.practicum.playlistmakerfinish.player.ui.PlayerActivity
+import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys
+import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys.SEARCH_HISTORY_KEY
 import com.practicum.playlistmakerfinish.search.presentation.SearchViewModel
 import com.practicum.playlistmakerfinish.search.presentation.SearchViewModelFactory
 
@@ -68,10 +71,10 @@ class SearchActivity : AppCompatActivity() {
         tracksHistoryRv.adapter = historyAdapter
 
         val trackInteractor = ServiceLocator.provideTrackInteractor()
-        val sharedPrefs = getSharedPreferences(SEARCH_HISTORY_KEY, MODE_PRIVATE)
-        val searchHistory = SharedPreferencesSearchHistoryRepository(sharedPrefs)
+        val searchHistory = ServiceLocator.provideSearchHistoryRepository()
 
-        viewModel = ViewModelProvider(this, SearchViewModelFactory(trackInteractor, searchHistory))[SearchViewModel::class.java]
+        viewModel = ViewModelProvider(this, SearchViewModelFactory(trackInteractor, searchHistory))
+            .get(SearchViewModel::class.java)
 
         adapter.onTrackClickListener = { track ->
             if (clickDebounce()) {
@@ -98,7 +101,6 @@ class SearchActivity : AppCompatActivity() {
 
                 if (queryInput.text.isEmpty()) {
                     viewModel.loadSearchHistory()
-                    searchHistoryLayout.visibility = View.VISIBLE
                 }
             } else {
                 searchHistoryLayout.visibility = View.GONE
@@ -121,7 +123,7 @@ class SearchActivity : AppCompatActivity() {
                 } else {
                     clearButton.visibility = View.VISIBLE
                 }
-                viewModel.searchDebounce(s.toString())
+                viewModel.searchTracks(s.toString())
             }
 
             override fun afterTextChanged(s: Editable?) {}

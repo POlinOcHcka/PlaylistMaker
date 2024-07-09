@@ -1,4 +1,4 @@
-package com.practicum.playlistmakerfinish.player.domain.model
+package com.practicum.playlistmakerfinish.player.domain
 
 data class PlayerTrack(
     val name: String,

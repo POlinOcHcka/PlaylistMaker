@@ -3,8 +3,6 @@ package com.practicum.playlistmakerfinish.search.ui
 import com.practicum.playlistmakerfinish.search.domain.SearchHistoryRepository.SearchHistoryRepository
 import com.practicum.playlistmakerfinish.search.domain.model.Track
 
-const val SEARCH_HISTORY_KEY = "search_history"
-
 class SearchHistory(private val searchHistoryRepository: SearchHistoryRepository) {
 
     fun saveTrack(track: Track) {

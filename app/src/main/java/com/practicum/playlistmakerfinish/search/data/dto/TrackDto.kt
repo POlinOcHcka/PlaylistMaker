@@ -2,7 +2,7 @@ package com.practicum.playlistmakerfinish.search.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class TrackDto (
+data class TrackDto(
     @SerializedName("trackId") val trackId: Int,
     @SerializedName("trackName") val trackName: String,
     @SerializedName("artistName") val trackArtistName: String,
@@ -13,4 +13,4 @@ data class TrackDto (
     @SerializedName("primaryGenreName") val trackPrimaryGenreName: String,
     @SerializedName("country") val trackCountry: String,
     @SerializedName("previewUrl") val trackPreviewUrl: String
-    )
+)

@@ -1,7 +1,7 @@
 package com.practicum.playlistmakerfinish.player.data
 
 import com.google.gson.Gson
-import com.practicum.playlistmakerfinish.player.domain.model.PlayerTrack
+import com.practicum.playlistmakerfinish.player.domain.PlayerTrack
 
 class TrackRepository {
     fun getTrackFromJson(json: String): PlayerTrack? {

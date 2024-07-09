@@ -32,8 +32,8 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
         if (position in trackList.indices) {
             holder.bind(trackList[position])
             holder.itemView.setOnClickListener {
-                Log.d("TrackAdapter", "Track clicked: ${trackList[position]}")
-                onTrackClickListener?.invoke(trackList[position])}
+                onTrackClickListener?.invoke(trackList[position])
+            }
         }
     }
 

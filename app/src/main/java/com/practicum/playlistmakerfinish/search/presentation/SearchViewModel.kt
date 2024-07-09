@@ -5,10 +5,14 @@ import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.practicum.playlistmakerfinish.search.data.SharedPreferencesSearchHistoryRepository
+import com.practicum.playlistmakerfinish.search.domain.SearchHistoryRepository.SearchHistoryRepository
 import com.practicum.playlistmakerfinish.search.domain.api.TrackInteractor
 import com.practicum.playlistmakerfinish.search.domain.model.Track
 
-class SearchViewModel(private val trackInteractor: TrackInteractor, private val searchHistory: SharedPreferencesSearchHistoryRepository) : ViewModel() {
+class SearchViewModel(
+    private val trackInteractor: TrackInteractor,
+    private val searchHistory: SearchHistoryRepository
+) : ViewModel() {
 
     val searchResults: MutableLiveData<List<Track>> = MutableLiveData()
     val isLoading: MutableLiveData<Boolean> = MutableLiveData()
@@ -17,7 +21,6 @@ class SearchViewModel(private val trackInteractor: TrackInteractor, private val 
     val searchHistoryTracks: MutableLiveData<List<Track>> = MutableLiveData()
 
     private val handler = Handler(Looper.getMainLooper())
-    private val searchRunnable = Runnable { performSearch() }
 
     fun searchTracks(query: String) {
         isLoading.value = true
@@ -39,16 +42,6 @@ class SearchViewModel(private val trackInteractor: TrackInteractor, private val 
                 showError.postValue(true)
             }
         })
-    }
-
-    private fun performSearch() {
-        val query = searchResults.value.toString()
-        searchTracks(query)
-    }
-
-    fun searchDebounce(query: String) {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed({ searchTracks(query) }, 2000L)
     }
 
     fun saveTrackToHistory(track: Track) {

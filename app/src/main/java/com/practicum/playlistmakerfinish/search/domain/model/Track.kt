@@ -1,6 +1,6 @@
 package com.practicum.playlistmakerfinish.search.domain.model
 
-data class Track (
+data class Track(
     val id: Int,
     val name: String,
     val artistName: String,

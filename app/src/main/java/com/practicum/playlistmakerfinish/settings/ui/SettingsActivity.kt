@@ -11,8 +11,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmakerfinish.R
-import com.practicum.playlistmakerfinish.settings.data.SettingsRepository
-import com.practicum.playlistmakerfinish.settings.domain.SwitchThemeUseCase
+import com.practicum.playlistmakerfinish.ServiceLocator.ServiceLocator
 import com.practicum.playlistmakerfinish.settings.presentation.SettingsViewModel
 import com.practicum.playlistmakerfinish.settings.presentation.SettingsViewModelFactory
 
@@ -24,10 +23,8 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val repository = SettingsRepository(applicationContext)
-        val switchThemeUseCase = SwitchThemeUseCase(repository)
-        val viewModelFactory = SettingsViewModelFactory(switchThemeUseCase)
-        viewModel = ViewModelProvider(this, viewModelFactory)[SettingsViewModel::class.java]
+        val switchThemeUseCase = ServiceLocator.provideSwitchThemeUseCase(applicationContext)
+        viewModel = ViewModelProvider(this, SettingsViewModelFactory(switchThemeUseCase))[SettingsViewModel::class.java]
 
         val back = findViewById<ImageButton>(R.id.button_back_settings)
         back.setOnClickListener { finish() }

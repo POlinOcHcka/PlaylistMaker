@@ -12,12 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmakerfinish.R
-import com.practicum.playlistmakerfinish.player.data.TrackRepository
-import com.practicum.playlistmakerfinish.player.domain.GetTrackUseCase
-import com.practicum.playlistmakerfinish.player.domain.model.PlayerTrack
+import com.practicum.playlistmakerfinish.ServiceLocator.ServiceLocator
+import com.practicum.playlistmakerfinish.player.domain.PlayerTrack
 import com.practicum.playlistmakerfinish.player.presentation.PlayerViewModel
-import com.practicum.playlistmakerfinish.player.presentation.PlayerViewModelFactory
-import com.practicum.playlistmakerfinish.search.ui.SEARCH_HISTORY_KEY
+import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys.SEARCH_HISTORY_KEY
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -83,7 +81,7 @@ class PlayerActivity : AppCompatActivity() {
 
         val value: String? = intent.getStringExtra(SEARCH_HISTORY_KEY)
 
-        viewModel = ViewModelProvider(this, PlayerViewModelFactory(GetTrackUseCase(TrackRepository())))
+        viewModel = ViewModelProvider(this, ServiceLocator.providePlayerViewModelFactory())
             .get(PlayerViewModel::class.java)
 
         value?.let { viewModel.getTrack(it) }
@@ -150,10 +148,8 @@ class PlayerActivity : AppCompatActivity() {
             }
             setOnCompletionListener {
                 viewModel.setPlayerState(STATE_PREPARED)
-
                 mainThreadHandler?.removeCallbacks(runnable)
                 playTime.text = String.format("%02d:%02d", 0, 0)
-
                 play.setImageResource(R.drawable.icon_play)
             }
         }
@@ -163,7 +159,6 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer?.start()
         play.setImageResource(R.drawable.icon_pause)
         viewModel.setPlayerState(STATE_PLAYING)
-
         mainThreadHandler?.postDelayed(runnable, LAG)
     }
 
@@ -171,7 +166,6 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer?.pause()
         play.setImageResource(R.drawable.icon_play)
         viewModel.setPlayerState(STATE_PAUSED)
-
         mainThreadHandler?.removeCallbacks(runnable)
     }
 }
