@@ -1,4 +1,4 @@
-package com.practicum.playlistmakerfinish.settings.data
+package com.practicum.playlistmakerfinish.settings.domain
 
 interface SettingsRepository {
     var isDarkTheme: Boolean

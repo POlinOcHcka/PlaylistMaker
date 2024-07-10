@@ -3,6 +3,7 @@ package com.practicum.playlistmakerfinish.settings.data
 import android.content.Context
 import android.content.SharedPreferences
 import com.practicum.playlistmakerfinish.app.ui.App
+import com.practicum.playlistmakerfinish.settings.domain.SettingsRepository
 
 class SettingsRepositoryImpl(private val context: Context) : SettingsRepository {
 

@@ -8,7 +8,8 @@ import com.practicum.playlistmakerfinish.app.domain.SetThemeUseCase
 import com.practicum.playlistmakerfinish.app.data.ThemeRepository
 import com.practicum.playlistmakerfinish.app.data.ThemeRepositoryImpl
 import com.practicum.playlistmakerfinish.app.ui.App
-import com.practicum.playlistmakerfinish.player.data.TrackRepository
+import com.practicum.playlistmakerfinish.player.data.TrackRepositoryImpl
+import com.practicum.playlistmakerfinish.player.domain.TrackRepository
 import com.practicum.playlistmakerfinish.player.domain.GetTrackUseCase
 import com.practicum.playlistmakerfinish.player.presentation.PlayerViewModelFactory
 import com.practicum.playlistmakerfinish.search.data.SharedPreferencesSearchHistoryRepository
@@ -20,7 +21,7 @@ import com.practicum.playlistmakerfinish.search.domain.api.TrackInteractor
 import com.practicum.playlistmakerfinish.search.domain.api.TracksRepository
 import com.practicum.playlistmakerfinish.search.domain.impl.TrackInteractorImpl
 import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys.SEARCH_HISTORY_KEY
-import com.practicum.playlistmakerfinish.settings.data.SettingsRepository
+import com.practicum.playlistmakerfinish.settings.domain.SettingsRepository
 import com.practicum.playlistmakerfinish.settings.data.SettingsRepositoryImpl
 import com.practicum.playlistmakerfinish.settings.domain.SwitchThemeUseCase
 
@@ -51,7 +52,7 @@ object ServiceLocator {
     }
 
     private val trackRepository: TrackRepository by lazy {
-        TrackRepository()
+        TrackRepositoryImpl()
     }
 
     private val getTrackUseCase: GetTrackUseCase by lazy {
