@@ -14,6 +14,7 @@ import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.player.domain.PlayerTrack
 import com.practicum.playlistmakerfinish.player.presentation.PlayerViewModel
 import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys.SEARCH_HISTORY_KEY
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,6 +47,7 @@ class PlayerActivity : AppCompatActivity() {
     private var url: String? = null
 
     private val viewModel by viewModel<PlayerViewModel>()
+    private val mediaPlayerProvider by inject<MediaPlayer>()
 
     private val runnable = object : Runnable {
         override fun run() {
@@ -136,7 +138,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun preparePlayer() {
         playTime.text = String.format("%02d:%02d", 0, 0)
-        mediaPlayer = MediaPlayer().apply {
+        mediaPlayer = mediaPlayerProvider.apply {
             setDataSource(url)
             prepareAsync()
             setOnPreparedListener {

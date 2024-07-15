@@ -18,11 +18,13 @@ import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.player.ui.PlayerActivity
 import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys
 import com.practicum.playlistmakerfinish.search.presentation.SearchViewModel
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private val viewModel by viewModel<SearchViewModel>()
+    private val viewModel: SearchViewModel by viewModel()
+    private val gson: Gson by inject()
 
     private lateinit var back: ImageButton
     private lateinit var recyclerView: RecyclerView
@@ -66,7 +68,7 @@ class SearchActivity : AppCompatActivity() {
             if (clickDebounce()) {
                 viewModel.saveTrackToHistory(track)
                 val playerIntent = Intent(this, PlayerActivity::class.java)
-                playerIntent.putExtra(IntentKeys.SEARCH_HISTORY_KEY, Gson().toJson(track))
+                playerIntent.putExtra(IntentKeys.SEARCH_HISTORY_KEY, gson.toJson(track))
                 startActivity(playerIntent)
             }
         }
@@ -75,7 +77,7 @@ class SearchActivity : AppCompatActivity() {
             if (clickDebounce()) {
                 viewModel.saveTrackToHistory(track)
                 val playerIntent = Intent(this, PlayerActivity::class.java)
-                playerIntent.putExtra(IntentKeys.SEARCH_HISTORY_KEY, Gson().toJson(track))
+                playerIntent.putExtra(IntentKeys.SEARCH_HISTORY_KEY, gson.toJson(track))
                 startActivity(playerIntent)
             }
         }

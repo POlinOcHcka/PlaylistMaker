@@ -10,7 +10,7 @@ import org.koin.dsl.module
 
 val appModule = module {
     single<ThemeRepository> { ThemeRepositoryImpl(get()) }
-    single { GetThemeUseCase(get()) }
-    single { SetThemeUseCase(get()) }
+    factory { GetThemeUseCase(get()) }
+    factory { SetThemeUseCase(get()) }
     viewModel { AppViewModel(get(), get()) }
 }

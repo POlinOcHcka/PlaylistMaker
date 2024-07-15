@@ -9,6 +9,6 @@ import org.koin.dsl.module
 
 val settingsModule = module {
     single<SettingsRepository> { SettingsRepositoryImpl(get()) }
-    single { SwitchThemeUseCase(get()) }
+    factory { SwitchThemeUseCase(get()) }
     viewModel { SettingsViewModel(get()) }
 }

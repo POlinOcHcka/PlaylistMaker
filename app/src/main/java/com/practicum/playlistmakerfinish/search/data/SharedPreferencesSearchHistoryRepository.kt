@@ -6,8 +6,10 @@ import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmakerfinish.search.domain.SearchHistoryRepository.SearchHistoryRepository
 import com.practicum.playlistmakerfinish.search.domain.model.Track
 
-class SharedPreferencesSearchHistoryRepository(private val sharedPreferences: SharedPreferences) :
-    SearchHistoryRepository {
+class SharedPreferencesSearchHistoryRepository(
+    private val sharedPreferences: SharedPreferences,
+    private val gson: Gson
+) : SearchHistoryRepository {
 
     override fun saveTrack(track: Track) {
         val searchHistory = readTracks().toMutableList()
@@ -19,7 +21,7 @@ class SharedPreferencesSearchHistoryRepository(private val sharedPreferences: Sh
             searchHistory.removeAt(MAX_SIZE)
         }
 
-        val json = Gson().toJson(searchHistory)
+        val json = gson.toJson(searchHistory)
         sharedPreferences.edit()
             .putString(SEARCH_HISTORY_KEY, json)
             .apply()
@@ -28,7 +30,7 @@ class SharedPreferencesSearchHistoryRepository(private val sharedPreferences: Sh
     override fun readTracks(): List<Track> {
         val json = sharedPreferences.getString(SEARCH_HISTORY_KEY, null) ?: return emptyList()
         val arrayType = object : TypeToken<List<Track>>() {}.type
-        return Gson().fromJson(json, arrayType)
+        return gson.fromJson(json, arrayType)
     }
 
     override fun clearTracks() {

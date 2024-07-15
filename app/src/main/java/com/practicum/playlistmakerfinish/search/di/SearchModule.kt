@@ -1,6 +1,7 @@
 package com.practicum.playlistmakerfinish.search.di
 
 import android.content.Context
+import com.google.gson.Gson
 import com.practicum.playlistmakerfinish.search.data.SharedPreferencesSearchHistoryRepository
 import com.practicum.playlistmakerfinish.search.data.TracksRepositoryImpl
 import com.practicum.playlistmakerfinish.search.data.network.ItunesAPI
@@ -26,8 +27,14 @@ val searchModule = module {
         retrofit.create(ItunesAPI::class.java)
     }
     single<NetworkClient> { RetrofitNetworkClient(get()) }
-    single<SearchHistoryRepository> { SharedPreferencesSearchHistoryRepository(androidContext().getSharedPreferences("settings", Context.MODE_PRIVATE)) }
+    single { Gson() }
+    single<SearchHistoryRepository> {
+        SharedPreferencesSearchHistoryRepository(
+            androidContext().getSharedPreferences("settings", Context.MODE_PRIVATE),
+            get()
+        )
+    }
     single<TracksRepository> { TracksRepositoryImpl(get()) }
-    single<TrackInteractor> { TrackInteractorImpl(get()) }
+    factory<TrackInteractor> { TrackInteractorImpl(get()) }
     viewModel { SearchViewModel(get(), get()) }
 }
