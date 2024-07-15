@@ -8,18 +8,18 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmakerfinish.R
-import com.practicum.playlistmakerfinish.ServiceLocator.ServiceLocator
 import com.practicum.playlistmakerfinish.player.domain.PlayerTrack
 import com.practicum.playlistmakerfinish.player.presentation.PlayerViewModel
 import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys.SEARCH_HISTORY_KEY
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class PlayerActivity : AppCompatActivity() {
+
     private lateinit var back: ImageView
     private lateinit var albumCover: ImageView
     private lateinit var trackName: TextView
@@ -45,7 +45,7 @@ class PlayerActivity : AppCompatActivity() {
     private var mainThreadHandler: Handler? = null
     private var url: String? = null
 
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel by viewModel<PlayerViewModel>()
 
     private val runnable = object : Runnable {
         override fun run() {
@@ -80,10 +80,6 @@ class PlayerActivity : AppCompatActivity() {
         play.setOnClickListener { playbackControl() }
 
         val value: String? = intent.getStringExtra(SEARCH_HISTORY_KEY)
-
-        viewModel = ViewModelProvider(this, ServiceLocator.providePlayerViewModelFactory())
-            .get(PlayerViewModel::class.java)
-
         value?.let { viewModel.getTrack(it) }
 
         observeViewModel()

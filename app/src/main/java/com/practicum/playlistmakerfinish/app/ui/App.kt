@@ -2,16 +2,16 @@ package com.practicum.playlistmakerfinish.app.ui
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.practicum.playlistmakerfinish.ServiceLocator.ServiceLocator
-import com.practicum.playlistmakerfinish.app.domain.GetThemeUseCase
-import com.practicum.playlistmakerfinish.app.domain.SetThemeUseCase
-
-const val THEME_PREFERENCES = "theme_preferences"
-const val THEME_KEY = "night_fact"
+import com.practicum.playlistmakerfinish.app.di.appModule
+import com.practicum.playlistmakerfinish.app.presentation.AppViewModel
+import com.practicum.playlistmakerfinish.player.di.playerModule
+import com.practicum.playlistmakerfinish.search.di.searchModule
+import com.practicum.playlistmakerfinish.settings.di.settingsModule
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class App : Application() {
-    private lateinit var getThemeUseCase: GetThemeUseCase
-    private lateinit var setThemeUseCase: SetThemeUseCase
 
     companion object {
         lateinit var instance: App
@@ -22,11 +22,16 @@ class App : Application() {
         super.onCreate()
         instance = this
 
-        getThemeUseCase = ServiceLocator.provideGetThemeUseCase(this)
-        setThemeUseCase = ServiceLocator.provideSetThemeUseCase(this)
+        startKoin {
+            androidContext(this@App)
+            modules(appModule, playerModule, searchModule, settingsModule)
+        }
 
-        val darkTheme = getThemeUseCase.execute()
-        switchTheme(darkTheme)
+        val viewModel: AppViewModel = getKoin().get()
+
+        viewModel.isDarkTheme.observeForever { isDarkTheme ->
+            switchTheme(isDarkTheme)
+        }
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
@@ -37,6 +42,5 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-        setThemeUseCase.execute(darkThemeEnabled)
     }
 }

@@ -2,35 +2,27 @@ package com.practicum.playlistmakerfinish.search.ui
 
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import androidx.lifecycle.ViewModelProvider
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.practicum.playlistmakerfinish.ServiceLocator.ServiceLocator
 import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.player.ui.PlayerActivity
 import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys
-import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys.SEARCH_HISTORY_KEY
 import com.practicum.playlistmakerfinish.search.presentation.SearchViewModel
-import com.practicum.playlistmakerfinish.search.presentation.SearchViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel by viewModel<SearchViewModel>()
 
     private lateinit var back: ImageButton
     private lateinit var recyclerView: RecyclerView
@@ -70,17 +62,11 @@ class SearchActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         tracksHistoryRv.adapter = historyAdapter
 
-        val trackInteractor = ServiceLocator.provideTrackInteractor()
-        val searchHistory = ServiceLocator.provideSearchHistoryRepository()
-
-        viewModel = ViewModelProvider(this, SearchViewModelFactory(trackInteractor, searchHistory))
-            .get(SearchViewModel::class.java)
-
         adapter.onTrackClickListener = { track ->
             if (clickDebounce()) {
                 viewModel.saveTrackToHistory(track)
                 val playerIntent = Intent(this, PlayerActivity::class.java)
-                playerIntent.putExtra(SEARCH_HISTORY_KEY, Gson().toJson(track))
+                playerIntent.putExtra(IntentKeys.SEARCH_HISTORY_KEY, Gson().toJson(track))
                 startActivity(playerIntent)
             }
         }
@@ -89,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
             if (clickDebounce()) {
                 viewModel.saveTrackToHistory(track)
                 val playerIntent = Intent(this, PlayerActivity::class.java)
-                playerIntent.putExtra(SEARCH_HISTORY_KEY, Gson().toJson(track))
+                playerIntent.putExtra(IntentKeys.SEARCH_HISTORY_KEY, Gson().toJson(track))
                 startActivity(playerIntent)
             }
         }
