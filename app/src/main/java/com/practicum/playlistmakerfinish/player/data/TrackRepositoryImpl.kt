@@ -4,8 +4,8 @@ import com.google.gson.Gson
 import com.practicum.playlistmakerfinish.player.domain.PlayerTrack
 import com.practicum.playlistmakerfinish.player.domain.TrackRepository
 
-class TrackRepositoryImpl : TrackRepository {
+class TrackRepositoryImpl(private val gson: Gson) : TrackRepository {
     override fun getTrackFromJson(json: String): PlayerTrack? {
-        return Gson().fromJson(json, PlayerTrack::class.java)
+        return gson.fromJson(json, PlayerTrack::class.java)
     }
 }

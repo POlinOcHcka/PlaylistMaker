@@ -1,10 +1,7 @@
 package com.practicum.playlistmakerfinish.search.presentation
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.practicum.playlistmakerfinish.search.data.SharedPreferencesSearchHistoryRepository
 import com.practicum.playlistmakerfinish.search.domain.SearchHistoryRepository.SearchHistoryRepository
 import com.practicum.playlistmakerfinish.search.domain.api.TrackInteractor
 import com.practicum.playlistmakerfinish.search.domain.model.Track
@@ -19,8 +16,6 @@ class SearchViewModel(
     val showNoResults: MutableLiveData<Boolean> = MutableLiveData()
     val showError: MutableLiveData<Boolean> = MutableLiveData()
     val searchHistoryTracks: MutableLiveData<List<Track>> = MutableLiveData()
-
-    private val handler = Handler(Looper.getMainLooper())
 
     fun searchTracks(query: String) {
         isLoading.value = true

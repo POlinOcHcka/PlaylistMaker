@@ -2,29 +2,24 @@ package com.practicum.playlistmakerfinish.settings.ui
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmakerfinish.R
-import com.practicum.playlistmakerfinish.ServiceLocator.ServiceLocator
 import com.practicum.playlistmakerfinish.settings.presentation.SettingsViewModel
-import com.practicum.playlistmakerfinish.settings.presentation.SettingsViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel by viewModel<SettingsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
-        val switchThemeUseCase = ServiceLocator.provideSwitchThemeUseCase(applicationContext)
-        viewModel = ViewModelProvider(this, SettingsViewModelFactory(switchThemeUseCase))[SettingsViewModel::class.java]
 
         val back = findViewById<ImageButton>(R.id.button_back_settings)
         back.setOnClickListener { finish() }
