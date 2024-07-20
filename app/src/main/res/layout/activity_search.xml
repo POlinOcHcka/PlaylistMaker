@@ -117,7 +117,7 @@
                 style="@style/PlaceholderImageNoResults"/>
 
             <TextView
-                style="@style/PlaceholderTextView"
+                style="@style/PlaceholderSearch"
                 android:text="@string/text_no_results" />
         </LinearLayout>
 
@@ -130,7 +130,7 @@
                 style="@style/PlaceholderImageServerError"/>
 
             <TextView
-                style="@style/PlaceholderTextView"
+                style="@style/PlaceholderSearch"
                 android:text="@string/text_server_error"/>
 
             <Button

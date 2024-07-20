@@ -18,6 +18,11 @@
     <string name="year">Год</string>
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
+    <string name="library_empty">Ваша медиатека пуста</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="not_playlists">Вы не создали\nни одного плейлиста</string>
+    <string name="favourite_tracks">Избранные треки</string>
+    <string name="playlists">Плейлисты</string>
 
     <string name="settings_link_course" translatable="false">https://practicum.yandex.ru/android-developer/?from=catalog</string>
     <string name="settings_support_email" translatable="false">polin0chch@gmail.com</string>

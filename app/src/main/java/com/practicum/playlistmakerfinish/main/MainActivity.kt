@@ -7,7 +7,7 @@ import android.widget.Button
 import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.search.ui.SearchActivity
 import com.practicum.playlistmakerfinish.settings.ui.SettingsActivity
-import com.practicum.playlistmakerfinish.library.LibraryActivity
+import com.practicum.playlistmakerfinish.library.ui.LibraryActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
