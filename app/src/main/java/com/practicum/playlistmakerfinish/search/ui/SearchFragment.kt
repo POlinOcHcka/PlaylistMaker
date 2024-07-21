@@ -130,16 +130,16 @@ class SearchFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.searchResults.observe(viewLifecycleOwner) { tracks ->
-            adapter.setList(tracks)
-            showTrackList()
+            if (tracks.isEmpty()) {
+                showNoResultsPlaceholder()
+            } else {
+                adapter.setList(tracks)
+                showTrackList()
+            }
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
-
-        viewModel.showNoResults.observe(viewLifecycleOwner) { showNoResults ->
-            if (showNoResults) showNoResultsPlaceholder() else showTrackList()
         }
 
         viewModel.showError.observe(viewLifecycleOwner) { showError ->

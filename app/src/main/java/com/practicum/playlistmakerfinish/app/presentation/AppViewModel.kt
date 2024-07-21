@@ -20,16 +20,16 @@ class AppViewModel(
         loadTheme()
     }
 
-    private fun loadTheme() {
-        viewModelScope.launch {
-            _isDarkTheme.value = getThemeUseCase.execute()
-        }
+    fun loadTheme() {
+        _isDarkTheme.value = getThemeUseCase.execute()
     }
 
     fun switchTheme(isDark: Boolean) {
-        viewModelScope.launch {
-            setThemeUseCase.execute(isDark)
-            _isDarkTheme.value = isDark
-        }
+        setThemeUseCase.execute(isDark)
+        _isDarkTheme.value = isDark
+    }
+
+    fun getThemeState(): Boolean {
+        return getThemeUseCase.execute()
     }
 }
