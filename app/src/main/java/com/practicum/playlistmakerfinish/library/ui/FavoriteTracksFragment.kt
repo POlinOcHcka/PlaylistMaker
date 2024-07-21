@@ -9,10 +9,10 @@ import com.practicum.playlistmakerfinish.databinding.FragmentFavoriteTracksBindi
 import com.practicum.playlistmakerfinish.library.presentation.FavoriteTracksViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavoriteTracks : Fragment() {
+class FavoriteTracksFragment : Fragment() {
 
     companion object {
-        fun newInstance() = FavoriteTracks()
+        fun newInstance() = FavoriteTracksFragment()
     }
 
     private val viewModel: FavoriteTracksViewModel by viewModel()
@@ -27,5 +27,10 @@ class FavoriteTracks : Fragment() {
     ): View {
         _binding = FragmentFavoriteTracksBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
