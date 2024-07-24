@@ -1,6 +1,7 @@
 package com.practicum.playlistmakerfinish.app.ui
 
 import android.app.Application
+import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmakerfinish.app.di.appModule
 import com.practicum.playlistmakerfinish.app.presentation.AppViewModel
@@ -23,16 +24,18 @@ class App : Application() {
         super.onCreate()
         instance = this
 
+        applySavedTheme()  // Применяем сохраненную тему
+
         startKoin {
             androidContext(this@App)
             modules(appModule, playerModule, searchModule, settingsModule, libraryModule)
         }
+    }
 
-        val viewModel: AppViewModel = getKoin().get()
-
-        viewModel.isDarkTheme.observeForever { isDarkTheme ->
-            switchTheme(isDarkTheme)
-        }
+    private fun applySavedTheme() {
+        val sharedPreferences = getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
+        val isDarkTheme = sharedPreferences.getBoolean("theme_key", false)
+        switchTheme(isDarkTheme)
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

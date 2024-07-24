@@ -1,38 +1,24 @@
 package com.practicum.playlistmakerfinish.main
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.practicum.playlistmakerfinish.R
-import com.practicum.playlistmakerfinish.search.ui.SearchActivity
-import com.practicum.playlistmakerfinish.settings.ui.SettingsActivity
-import com.practicum.playlistmakerfinish.library.ui.LibraryActivity
+import com.practicum.playlistmakerfinish.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val buttonSearch = findViewById<Button>(R.id.button_search)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+        val navController = navHostFragment.navController
 
-        buttonSearch.setOnClickListener {
-            val buttonSearch = Intent(this, SearchActivity::class.java)
-            startActivity(buttonSearch)
-        }
-
-        val buttonMedia = findViewById<Button>(R.id.button_media)
-
-        buttonMedia.setOnClickListener {
-            val buttonMedia = Intent(this, LibraryActivity::class.java)
-            startActivity(buttonMedia)
-        }
-
-        val buttonSettings = findViewById<Button>(R.id.button_settings)
-
-        buttonSettings.setOnClickListener {
-            val buttonSettings = Intent(this, SettingsActivity::class.java)
-            startActivity(buttonSettings)
-        }
+        binding.bottomNavigationView.setupWithNavController(navController)
     }
 }

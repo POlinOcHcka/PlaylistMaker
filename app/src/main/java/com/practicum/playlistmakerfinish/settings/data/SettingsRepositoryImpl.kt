@@ -7,16 +7,16 @@ import com.practicum.playlistmakerfinish.settings.domain.SettingsRepository
 
 class SettingsRepositoryImpl(private val context: Context) : SettingsRepository {
 
-    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
 
     override var isDarkTheme: Boolean
-        get() = sharedPreferences.getBoolean("dark_theme", false)
+        get() = sharedPreferences.getBoolean("theme_key", false)
         set(value) {
-            sharedPreferences.edit().putBoolean("dark_theme", value).apply()
+            sharedPreferences.edit().putBoolean("theme_key", value).apply()
+            (context.applicationContext as App).switchTheme(value)
         }
 
     override fun switchTheme(isDark: Boolean) {
         isDarkTheme = isDark
-        (context.applicationContext as App).switchTheme(isDark)
     }
 }

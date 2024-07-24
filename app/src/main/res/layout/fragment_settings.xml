@@ -6,21 +6,13 @@
     android:background="?attr/colorSecondary"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        style="@style/Header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/size_4">
-
-        <ImageButton
-            android:id="@+id/button_back_settings"
-            style="@style/ButtonBack"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            style="@style/Header"
-            android:text="@string/text_settings"/>
-    </LinearLayout>
+        android:padding="@dimen/size_4"
+        android:text="@string/text_settings"/>
 
     <LinearLayout
         android:layout_marginTop="@dimen/size_24"

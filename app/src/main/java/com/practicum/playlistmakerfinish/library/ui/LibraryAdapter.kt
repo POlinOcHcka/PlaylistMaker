@@ -13,6 +13,6 @@ class LibraryAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle)
     }
 
     override fun createFragment(position: Int): Fragment {
-        return if (position == 0) FavoriteTracks.newInstance() else Playlists.newInstance()
+        return if (position == 0) FavoriteTracksFragment.newInstance() else PlaylistsFragment.newInstance()
     }
 }

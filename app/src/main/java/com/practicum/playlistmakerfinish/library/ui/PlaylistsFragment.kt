@@ -9,10 +9,10 @@ import com.practicum.playlistmakerfinish.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmakerfinish.library.presentation.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class Playlists : Fragment() {
+class PlaylistsFragment : Fragment() {
 
     companion object {
-        fun newInstance() = Playlists()
+        fun newInstance() = PlaylistsFragment()
     }
 
     private val viewModel: PlaylistsViewModel by viewModel()
@@ -27,5 +27,10 @@ class Playlists : Fragment() {
     ): View {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

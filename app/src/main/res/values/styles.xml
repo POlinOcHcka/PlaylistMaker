@@ -59,10 +59,8 @@
     </style>
     
     <style name="Header">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/size_10</item>
-        <item name="android:layout_marginStart">@dimen/size_24</item>
+        <item name="android:layout_marginStart">@dimen/size_12</item>
         <item name="android:gravity">start</item>
         <item name="android:textSize">@dimen/text_size_22</item>
         <item name="android:textStyle">bold</item>
