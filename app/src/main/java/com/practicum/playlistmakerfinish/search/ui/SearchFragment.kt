@@ -32,9 +32,8 @@ class SearchFragment : Fragment() {
     private lateinit var adapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
 
-    private val gson = Gson()
+    private val gson: Gson by inject()
 
-    private var searchJob: Job? = null
     private var clickJob: Job? = null
     private val debouncePeriod: Long = 500L
 
@@ -96,7 +95,7 @@ class SearchFragment : Fragment() {
         binding.searchString.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchDebounce(s.toString())
+                viewModel.searchTracks(s.toString())
             }
             override fun afterTextChanged(s: Editable?) {}
         })
@@ -116,7 +115,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.searchResults.collect { tracks ->
                 if (tracks.isEmpty()) {
                     showNoResultsPlaceholder()
@@ -127,19 +126,29 @@ class SearchFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.isLoading.collect { isLoading ->
-                binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                if (isLoading) {
+                    binding.searchHistory.visibility = View.GONE
+                    binding.progressBar.visibility = View.VISIBLE
+                } else {
+                    binding.progressBar.visibility = View.GONE
+                    if (binding.searchString.text.isEmpty() && binding.searchString.hasFocus()) {
+                        binding.searchHistory.visibility = View.VISIBLE
+                    } else {
+                        binding.searchHistory.visibility = View.GONE
+                    }
+                }
             }
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.showError.collect { showError ->
                 if (showError) showServerErrorPlaceholder() else showTrackList()
             }
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.searchHistoryTracks.collect { tracks ->
                 historyAdapter.setList(tracks)
                 if (tracks.isNotEmpty() && binding.searchString.hasFocus() && binding.searchString.text.isEmpty()) {
@@ -176,17 +185,9 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun searchDebounce(query: String) {
-        searchJob?.cancel()
-        searchJob = lifecycleScope.launch {
-            delay(debouncePeriod)
-            viewModel.searchTracks(query)
-        }
-    }
-
     private fun clickDebounce(action: () -> Unit) {
         clickJob?.cancel()
-        clickJob = lifecycleScope.launch {
+        clickJob = viewLifecycleOwner.lifecycleScope.launch {
             action()
             delay(debouncePeriod)
         }
@@ -195,7 +196,6 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        searchJob?.cancel()
         clickJob?.cancel()
     }
 }

@@ -1,13 +1,14 @@
 package com.practicum.playlistmakerfinish.search.presentation
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmakerfinish.search.domain.SearchHistoryRepository.SearchHistoryRepository
 import com.practicum.playlistmakerfinish.search.domain.api.TrackInteractor
 import com.practicum.playlistmakerfinish.search.domain.model.Track
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -30,24 +31,35 @@ class SearchViewModel(
     private val _searchHistoryTracks = MutableStateFlow<List<Track>>(emptyList())
     val searchHistoryTracks: StateFlow<List<Track>> get() = _searchHistoryTracks
 
+    private var searchJob: Job? = null
+    private val debouncePeriod: Long = 500L
+
     fun searchTracks(query: String) {
-        viewModelScope.launch {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(debouncePeriod)
             _isLoading.value = true
             _showNoResults.value = false
             _showError.value = false
 
-            try {
-                val tracks = trackInteractor.searchTracks(query)
-                _isLoading.value = false
-                if (tracks.isNotEmpty()) {
-                    _searchResults.value = tracks
-                } else {
-                    _showNoResults.value = true
+            trackInteractor.searchTracks(query)
+                .onEach { tracks ->
+                    _isLoading.value = false
+                    if (tracks.isNotEmpty()) {
+                        _searchResults.value = tracks
+                    } else {
+                        _showNoResults.value = true
+                    }
                 }
-            } catch (e: Exception) {
-                _isLoading.value = false
-                _showError.value = true
-            }
+                .catch { e ->
+                    if (e !is CancellationException) {
+                        _isLoading.value = false
+                        _showError.value = true
+                    } else {
+                        throw e
+                    }
+                }
+                .launchIn(viewModelScope)
         }
     }
 

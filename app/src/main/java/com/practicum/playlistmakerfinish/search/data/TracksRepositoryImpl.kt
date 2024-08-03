@@ -6,16 +6,21 @@ import com.practicum.playlistmakerfinish.search.data.dto.TrackSearchResponse
 import com.practicum.playlistmakerfinish.search.data.network.NetworkClient
 import com.practicum.playlistmakerfinish.search.domain.api.TracksRepository
 import com.practicum.playlistmakerfinish.search.domain.model.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 
 class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
 
-    override suspend fun searchTracks(expression: String): List<Track> {
+    override fun searchTracks(expression: String): Flow<List<Track>> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
         if (response.resultCode == 200) {
-            return (response as TrackSearchResponse).results.map { it.toDomainModel() }
+            emit((response as TrackSearchResponse).results.map { it.toDomainModel() })
         } else {
             throw Exception("Server error with code: ${response.resultCode}")
         }
+    }.catch { e ->
+        throw e
     }
 }
 

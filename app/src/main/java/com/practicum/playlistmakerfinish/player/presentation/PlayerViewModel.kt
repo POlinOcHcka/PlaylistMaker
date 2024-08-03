@@ -27,6 +27,12 @@ class PlayerViewModel(private val getTrackUseCase: GetTrackUseCase) : ViewModel(
 
     private var updateJob: Job? = null
 
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
+    companion object {
+        private const val UPDATE_INTERVAL = 300L
+    }
+
     fun getTrack(json: String) {
         val track = getTrackUseCase.execute(json)
         _trackLiveData.value = track
@@ -37,11 +43,12 @@ class PlayerViewModel(private val getTrackUseCase: GetTrackUseCase) : ViewModel(
     }
 
     fun startUpdatingProgress(mediaPlayer: MediaPlayer) {
+        updateJob?.cancel()
         updateJob = viewModelScope.launch {
             while (isActive) {
-                val formattedTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+                val formattedTime = dateFormat.format(mediaPlayer.currentPosition)
                 _currentTimeLiveData.postValue(formattedTime)
-                delay(300L)
+                delay(UPDATE_INTERVAL)
             }
         }
     }
