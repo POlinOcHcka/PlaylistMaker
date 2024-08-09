@@ -1,5 +1,6 @@
 package com.practicum.playlistmakerfinish.app.di
 
+import com.google.gson.Gson
 import com.practicum.playlistmakerfinish.app.data.ThemeRepositoryImpl
 import com.practicum.playlistmakerfinish.app.domain.GetThemeUseCase
 import com.practicum.playlistmakerfinish.app.domain.SetThemeUseCase
@@ -13,4 +14,5 @@ val appModule = module {
     factory { GetThemeUseCase(get()) }
     factory { SetThemeUseCase(get()) }
     viewModel { AppViewModel(get(), get()) }
+    single { Gson() }
 }

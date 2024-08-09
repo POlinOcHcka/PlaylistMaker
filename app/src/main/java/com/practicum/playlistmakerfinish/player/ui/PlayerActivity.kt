@@ -2,8 +2,6 @@ package com.practicum.playlistmakerfinish.player.ui
 
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -38,32 +36,18 @@ class PlayerActivity : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        private const val LAG = 500L
     }
 
     private var playerState = STATE_DEFAULT
     private var mediaPlayer: MediaPlayer? = null
-    private var mainThreadHandler: Handler? = null
     private var url: String? = null
 
     private val viewModel by viewModel<PlayerViewModel>()
     private val mediaPlayerProvider by inject<MediaPlayer>()
 
-    private val runnable = object : Runnable {
-        override fun run() {
-            mediaPlayer?.let {
-                val formattedTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(it.currentPosition)
-                playTime.text = formattedTime
-                mainThreadHandler?.postDelayed(this, LAG)
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
-
-        mainThreadHandler = Handler(Looper.getMainLooper())
 
         back = findViewById(R.id.button_back_player)
         albumCover = findViewById(R.id.album_cover)
@@ -78,17 +62,12 @@ class PlayerActivity : AppCompatActivity() {
         playTime = findViewById(R.id.play_time)
 
         back.setOnClickListener { finish() }
-
         play.setOnClickListener { playbackControl() }
 
         val value: String? = intent.getStringExtra(SEARCH_HISTORY_KEY)
         value?.let { viewModel.getTrack(it) }
 
         observeViewModel()
-
-        viewModel.playerStateLiveData.observe(this) { state ->
-            playerState = state
-        }
     }
 
     private fun observeViewModel() {
@@ -98,6 +77,14 @@ class PlayerActivity : AppCompatActivity() {
                 url = it.previewUrl
                 preparePlayer()
             }
+        }
+
+        viewModel.currentTimeLiveData.observe(this) { formattedTime ->
+            playTime.text = formattedTime
+        }
+
+        viewModel.playerStateLiveData.observe(this) { state ->
+            playerState = state
         }
     }
 
@@ -110,8 +97,8 @@ class PlayerActivity : AppCompatActivity() {
         trackName.text = track.name
         artistName.text = track.artistName
         trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.timeMillis)
-        album.text = track.collectionName.takeIf { !it.isNullOrEmpty() } ?: ""
-        year.text = try { track.releaseDate.split("-", limit = 2)[0] } catch (e: Exception) { "" }
+        album.text = track.collectionName ?: ""
+        year.text = track.releaseDate.split("-").getOrNull(0) ?: ""
         genre.text = track.primaryGenreName
         country.text = track.country
         play.setImageResource(R.drawable.icon_play)
@@ -123,7 +110,6 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        mainThreadHandler?.removeCallbacks(runnable)
         super.onDestroy()
         mediaPlayer?.release()
         mediaPlayer = null
@@ -146,7 +132,7 @@ class PlayerActivity : AppCompatActivity() {
             }
             setOnCompletionListener {
                 viewModel.setPlayerState(STATE_PREPARED)
-                mainThreadHandler?.removeCallbacks(runnable)
+                viewModel.stopUpdatingProgress()
                 playTime.text = String.format("%02d:%02d", 0, 0)
                 play.setImageResource(R.drawable.icon_play)
             }
@@ -157,13 +143,13 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer?.start()
         play.setImageResource(R.drawable.icon_pause)
         viewModel.setPlayerState(STATE_PLAYING)
-        mainThreadHandler?.postDelayed(runnable, LAG)
+        mediaPlayer?.let { viewModel.startUpdatingProgress(it) }
     }
 
     private fun pausePlayer() {
         mediaPlayer?.pause()
         play.setImageResource(R.drawable.icon_play)
         viewModel.setPlayerState(STATE_PAUSED)
-        mainThreadHandler?.removeCallbacks(runnable)
+        viewModel.stopUpdatingProgress()
     }
 }
