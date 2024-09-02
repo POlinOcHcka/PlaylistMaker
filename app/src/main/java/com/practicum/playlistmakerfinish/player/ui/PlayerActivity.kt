@@ -30,6 +30,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var country: TextView
     private lateinit var play: ImageButton
     private lateinit var playTime: TextView
+    private lateinit var favoriteButton: ImageButton
 
     private companion object {
         private const val STATE_DEFAULT = 0
@@ -60,9 +61,16 @@ class PlayerActivity : AppCompatActivity() {
         country = findViewById(R.id.track_country)
         play = findViewById(R.id.button_play)
         playTime = findViewById(R.id.play_time)
+        favoriteButton = findViewById(R.id.button_like)
 
         back.setOnClickListener { finish() }
         play.setOnClickListener { playbackControl() }
+
+        favoriteButton.setOnClickListener {
+            viewModel.trackLiveData.value?.let { track ->
+                viewModel.toggleFavorite(track)
+            }
+        }
 
         val value: String? = intent.getStringExtra(SEARCH_HISTORY_KEY)
         value?.let { viewModel.getTrack(it) }
@@ -73,9 +81,13 @@ class PlayerActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.trackLiveData.observe(this) { track ->
             track?.let {
-                updateUI(it)
-                url = it.previewUrl
-                preparePlayer()
+                if (url == null) {
+                    updateUI(it)
+                    url = it.previewUrl
+                    preparePlayer()
+                } else {
+                    updateFavoriteButton(it.isFavorite)
+                }
             }
         }
 
@@ -89,11 +101,14 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun updateUI(track: PlayerTrack) {
+        val artworkUrl = track.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg") ?: ""
+
         Glide.with(this)
-            .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
+            .load(artworkUrl)
             .placeholder(R.drawable.placeholder_player)
             .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.size_16)))
             .into(albumCover)
+
         trackName.text = track.name
         artistName.text = track.artistName
         trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.timeMillis)
@@ -102,6 +117,16 @@ class PlayerActivity : AppCompatActivity() {
         genre.text = track.primaryGenreName
         country.text = track.country
         play.setImageResource(R.drawable.icon_play)
+
+        updateFavoriteButton(track.isFavorite)
+    }
+
+    private fun updateFavoriteButton(isFavorite: Boolean) {
+        if (isFavorite) {
+            favoriteButton.setImageResource(R.drawable.icon_favorite_tracks)
+        } else {
+            favoriteButton.setImageResource(R.drawable.icon_like)
+        }
     }
 
     override fun onPause() {

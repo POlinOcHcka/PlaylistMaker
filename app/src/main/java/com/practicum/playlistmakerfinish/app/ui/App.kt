@@ -5,7 +5,10 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmakerfinish.app.di.appModule
 import com.practicum.playlistmakerfinish.app.presentation.AppViewModel
+import com.practicum.playlistmakerfinish.library.di.dataModule
 import com.practicum.playlistmakerfinish.library.di.libraryModule
+import com.practicum.playlistmakerfinish.library.di.presentationModule
+import com.practicum.playlistmakerfinish.library.di.repositoryModule
 import com.practicum.playlistmakerfinish.player.di.playerModule
 import com.practicum.playlistmakerfinish.search.di.searchModule
 import com.practicum.playlistmakerfinish.settings.di.settingsModule
@@ -24,11 +27,11 @@ class App : Application() {
         super.onCreate()
         instance = this
 
-        applySavedTheme()  // Применяем сохраненную тему
+        applySavedTheme()
 
         startKoin {
             androidContext(this@App)
-            modules(appModule, playerModule, searchModule, settingsModule, libraryModule)
+            modules(appModule, playerModule, searchModule, settingsModule, libraryModule, dataModule, repositoryModule, presentationModule)
         }
     }
 
