@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmakerfinish.library.db.TrackEntity
+import com.practicum.playlistmakerfinish.library.domain.FavoriteTracksRepository
 import com.practicum.playlistmakerfinish.player.domain.GetTrackUseCase
 import com.practicum.playlistmakerfinish.player.domain.PlayerTrack
 import kotlinx.coroutines.Job
@@ -14,7 +16,10 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PlayerViewModel(private val getTrackUseCase: GetTrackUseCase) : ViewModel() {
+class PlayerViewModel(
+    private val getTrackUseCase: GetTrackUseCase,
+    private val favoriteTracksRepository: FavoriteTracksRepository
+) : ViewModel() {
 
     private val _trackLiveData = MutableLiveData<PlayerTrack?>()
     val trackLiveData: LiveData<PlayerTrack?> get() = _trackLiveData
@@ -35,7 +40,29 @@ class PlayerViewModel(private val getTrackUseCase: GetTrackUseCase) : ViewModel(
 
     fun getTrack(json: String) {
         val track = getTrackUseCase.execute(json)
-        _trackLiveData.value = track
+        track?.let {
+            viewModelScope.launch {
+                it.isFavorite = isTrackFavorite(it.id)
+                _trackLiveData.postValue(it)
+            }
+        }
+    }
+
+    fun toggleFavorite(track: PlayerTrack) {
+        viewModelScope.launch {
+            track.isFavorite = !track.isFavorite
+            if (track.isFavorite) {
+                favoriteTracksRepository.addTrack(track.toEntity())
+            } else {
+                favoriteTracksRepository.removeTrack(track.toEntity())
+            }
+            _trackLiveData.value = track
+        }
+    }
+
+    private suspend fun isTrackFavorite(trackId: String): Boolean {
+        val favoriteTrackIds = favoriteTracksRepository.getAllFavoriteTrackIds()
+        return favoriteTrackIds.contains(trackId)
     }
 
     fun setPlayerState(state: Int) {
@@ -57,3 +84,16 @@ class PlayerViewModel(private val getTrackUseCase: GetTrackUseCase) : ViewModel(
         updateJob?.cancel()
     }
 }
+
+fun PlayerTrack.toEntity() = TrackEntity(
+    trackId = this.id,
+    coverUrl = this.artworkUrl100,
+    trackName = this.name,
+    artistName = this.artistName,
+    albumName = this.collectionName,
+    releaseYear = this.releaseDate,
+    genre = this.primaryGenreName,
+    country = this.country,
+    duration = this.timeMillis.toString(),
+    trackUrl = this.previewUrl
+)

@@ -12,7 +12,7 @@ import org.koin.dsl.module
 val playerModule = module {
     single<TrackRepository> { TrackRepositoryImpl(get()) }
     factory { GetTrackUseCase(get()) }
-    viewModel { PlayerViewModel(get()) }
+    viewModel { PlayerViewModel(get(), get()) }
     single { Gson() }
     factory { MediaPlayer() }
 }
