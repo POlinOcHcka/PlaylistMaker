@@ -2,7 +2,6 @@ package com.practicum.playlistmakerfinish.search.ui
 
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,12 +12,16 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
+import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.databinding.FragmentSearchBinding
-import com.practicum.playlistmakerfinish.player.ui.PlayerActivity
-import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys
+import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys.SEARCH_HISTORY_KEY
+import com.practicum.playlistmakerfinish.search.domain.model.Track
 import com.practicum.playlistmakerfinish.search.presentation.SearchViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -57,18 +60,14 @@ class SearchFragment : Fragment() {
         adapter.onTrackClickListener = { track ->
             clickDebounce {
                 viewModel.saveTrackToHistory(track)
-                val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
-                playerIntent.putExtra(IntentKeys.SEARCH_HISTORY_KEY, gson.toJson(track))
-                startActivity(playerIntent)
+                navigateToPlayerFragment(track)
             }
         }
 
         historyAdapter.onTrackClickListener = { track ->
             clickDebounce {
                 viewModel.saveTrackToHistory(track)
-                val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
-                playerIntent.putExtra(IntentKeys.SEARCH_HISTORY_KEY, gson.toJson(track))
-                startActivity(playerIntent)
+                navigateToPlayerFragment(track)
             }
         }
 
@@ -112,6 +111,13 @@ class SearchFragment : Fragment() {
         }
 
         observeViewModel()
+    }
+
+    private fun navigateToPlayerFragment(track: Track) {
+        val bundle = Bundle().apply {
+            putString(SEARCH_HISTORY_KEY, gson.toJson(track))
+        }
+        findNavController().navigate(R.id.action_searchFragment_to_playerFragment, bundle)
     }
 
     private fun observeViewModel() {

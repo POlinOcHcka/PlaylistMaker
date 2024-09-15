@@ -3,9 +3,12 @@
     <color name="text_black">#1A1B22</color>
     <color name="text_white">#FFFFFFFF</color>
     <color name="text_gray">#AEAFB4</color>
+    <color name="text_blue">#3772E7</color>
 
     <color name="button_white">#FFFFFFFF</color>
+    <color name="button_gray">#AEAFB4</color>
     <color name="button_black">#1A1B22</color>
+    <color name="button_blue">#3772E7</color>
 
     <color name="background_blue">#3772E7</color>
     <color name="background_white">#FFFFFFFF</color>
@@ -19,6 +22,11 @@
     <color name="cursor_blue">#3772E7</color>
 
     <color name="progress_bar">#3772E7</color>
+
+    <color name="dotted_line">#AEAFB4</color>
+
+    <color name="box_stroke_gray">#AEAFB4</color>
+    <color name="box_stroke_blue">#3772E7</color>
 
 
     <color name="night_text_black">#1A1B22</color>

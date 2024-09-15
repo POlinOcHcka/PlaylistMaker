@@ -1,5 +1,7 @@
 package com.practicum.playlistmakerfinish.search.domain.model
 
+import com.practicum.playlistmakerfinish.library.db.TrackEntity
+
 data class Track(
     val id: Int,
     val name: String,
