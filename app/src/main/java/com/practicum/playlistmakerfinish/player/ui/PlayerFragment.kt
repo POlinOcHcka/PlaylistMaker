@@ -116,6 +116,17 @@ class PlayerFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.trackLiveData.value?.let {
+            updateUI(it)
+        }
+
+        if (playerState == STATE_PLAYING || playerState == STATE_PAUSED) {
+            mediaPlayer?.let { viewModel.startUpdatingProgress(it) }
+        }
+    }
+
     private fun observeViewModel() {
         viewModel.trackLiveData.observe(viewLifecycleOwner) { track ->
             track?.let {
@@ -124,6 +135,7 @@ class PlayerFragment : Fragment() {
                     url = it.previewUrl
                     preparePlayer()
                 } else {
+                    updateUI(it)
                     updateFavoriteButton(it.isFavorite)
                 }
             }
@@ -254,8 +266,7 @@ class PlayerFragment : Fragment() {
                 }
             }
 
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
         observePlaylists()
@@ -263,8 +274,7 @@ class PlayerFragment : Fragment() {
 
     private fun observePlaylists() {
         viewModel.observePlaylists().observe(viewLifecycleOwner) { playlists ->
-            if (playlists.isNullOrEmpty()) {
-            } else {
+            if (!playlists.isNullOrEmpty()) {
                 adapter?.playlists?.clear()
                 adapter?.playlists?.addAll(playlists)
                 adapter?.notifyDataSetChanged()

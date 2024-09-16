@@ -37,8 +37,8 @@ class SearchFragment : Fragment() {
 
     private val gson: Gson by inject()
 
-    private var clickJob: Job? = null
-    private val debouncePeriod: Long = 500L
+    private var searchJob: Job? = null
+    private val debouncePeriod: Long = 2000L // Задержка в 2 секунды
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,19 +91,39 @@ class SearchFragment : Fragment() {
             } else false
         }
 
+        // Реализация дебаунса для поиска
         binding.searchString.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.searchTracks(s.toString())
+                searchJob?.cancel() // Отменяем предыдущую задачу поиска
+                searchJob = lifecycleScope.launch {
+                    delay(debouncePeriod) // Ждем 2 секунды перед поиском
+                    viewModel.searchTracks(s.toString()) // Выполняем поиск после задержки
+
+                    if (s.isNullOrEmpty()) {
+                        binding.clear.visibility = View.GONE
+                    } else {
+                        binding.clear.visibility = View.VISIBLE
+                    }
+                }
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
         binding.clear.setOnClickListener {
             binding.searchString.text.clear()
+
             binding.clear.visibility = View.GONE
+
             val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.searchString.windowToken, 0)
+
+            viewModel.loadSearchHistory()
+
+            binding.rvTrack.visibility = View.GONE
+            binding.searchHistory.visibility = View.VISIBLE
         }
 
         binding.clearTrackHistory.setOnClickListener {
@@ -192,8 +212,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun clickDebounce(action: () -> Unit) {
-        clickJob?.cancel()
-        clickJob = viewLifecycleOwner.lifecycleScope.launch {
+        searchJob?.cancel()
+        searchJob = viewLifecycleOwner.lifecycleScope.launch {
             action()
             delay(debouncePeriod)
         }
@@ -202,6 +222,6 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        clickJob?.cancel()
+        searchJob?.cancel()
     }
 }
