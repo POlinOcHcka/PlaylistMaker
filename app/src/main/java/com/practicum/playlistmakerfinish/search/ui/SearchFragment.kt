@@ -38,7 +38,7 @@ class SearchFragment : Fragment() {
     private val gson: Gson by inject()
 
     private var searchJob: Job? = null
-    private val debouncePeriod: Long = 2000L // Задержка в 2 секунды
+    private val debouncePeriod: Long = 2000L
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,15 +72,8 @@ class SearchFragment : Fragment() {
         }
 
         binding.searchString.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(binding.searchString, InputMethodManager.SHOW_IMPLICIT)
-
-                if (binding.searchString.text.isEmpty()) {
-                    viewModel.loadSearchHistory()
-                }
-            } else {
-                binding.searchHistory.visibility = View.GONE
+            if (hasFocus && binding.searchString.text.isEmpty()) {
+                viewModel.loadSearchHistory()
             }
         }
 
@@ -91,20 +84,24 @@ class SearchFragment : Fragment() {
             } else false
         }
 
-        // Реализация дебаунса для поиска
         binding.searchString.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchJob?.cancel() // Отменяем предыдущую задачу поиска
-                searchJob = lifecycleScope.launch {
-                    delay(debouncePeriod) // Ждем 2 секунды перед поиском
-                    viewModel.searchTracks(s.toString()) // Выполняем поиск после задержки
+                // Показать/скрыть кнопку очистки сразу при изменении текста
+                binding.clear.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
 
+                // Поиск треков с дебаунсом
+                searchJob?.cancel()
+                searchJob = lifecycleScope.launch {
+                    delay(debouncePeriod)
                     if (s.isNullOrEmpty()) {
-                        binding.clear.visibility = View.GONE
+                        // Если строка поиска пуста, скрываем заглушку и загружаем историю поиска
+                        hidePlaceholders()
+                        viewModel.loadSearchHistory()
                     } else {
-                        binding.clear.visibility = View.VISIBLE
+                        // Если есть текст, ищем треки
+                        viewModel.searchTracks(s.toString())
                     }
                 }
             }
@@ -112,13 +109,11 @@ class SearchFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        // Кнопка "Очистить поиск"
         binding.clear.setOnClickListener {
             binding.searchString.text.clear()
-
             binding.clear.visibility = View.GONE
-
-            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(binding.searchString.windowToken, 0)
+            hideKeyboard()
 
             viewModel.loadSearchHistory()
 
@@ -126,6 +121,7 @@ class SearchFragment : Fragment() {
             binding.searchHistory.visibility = View.VISIBLE
         }
 
+        // Кнопка "Очистить историю"
         binding.clearTrackHistory.setOnClickListener {
             viewModel.clearSearchHistory()
         }
@@ -141,10 +137,11 @@ class SearchFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        // Наблюдаем за результатами поиска
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.searchResults.collect { tracks ->
-                if (tracks.isEmpty()) {
-                    showNoResultsPlaceholder()
+                if (tracks.isEmpty() && binding.searchString.text.isNotEmpty()) {
+                    showNoResultsPlaceholder() // Показать заглушку, если результатов нет и есть текст в строке поиска
                 } else {
                     adapter.setList(tracks)
                     showTrackList()
@@ -152,6 +149,7 @@ class SearchFragment : Fragment() {
             }
         }
 
+        // Наблюдаем за состоянием загрузки
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.isLoading.collect { isLoading ->
                 if (isLoading) {
@@ -160,30 +158,48 @@ class SearchFragment : Fragment() {
                 } else {
                     binding.progressBar.visibility = View.GONE
                     if (binding.searchString.text.isEmpty() && binding.searchString.hasFocus()) {
-                        binding.searchHistory.visibility = View.VISIBLE
-                    } else {
-                        binding.searchHistory.visibility = View.GONE
+                        viewModel.loadSearchHistory()
                     }
                 }
             }
         }
 
+        // Наблюдаем за ошибками
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.showError.collect { showError ->
                 if (showError) showServerErrorPlaceholder() else showTrackList()
             }
         }
 
+        // Наблюдаем за заглушкой "Нет результатов"
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.searchHistoryTracks.collect { tracks ->
-                historyAdapter.setList(tracks)
-                if (tracks.isNotEmpty() && binding.searchString.hasFocus() && binding.searchString.text.isEmpty()) {
-                    binding.searchHistory.visibility = View.VISIBLE
-                } else {
-                    binding.searchHistory.visibility = View.GONE
+            viewModel.showNoResults.collect { showNoResults ->
+                if (showNoResults) {
+                    showNoResultsPlaceholder() // Показываем плейсхолдер "Нет результатов"
                 }
             }
         }
+
+        // Наблюдаем за историей поиска
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.searchHistoryTracks.collect { tracks ->
+                historyAdapter.setList(tracks)
+                if (tracks.isNotEmpty() && binding.searchString.text.isEmpty()) {
+                    binding.searchHistory.visibility = View.VISIBLE
+                    binding.clearTrackHistory.visibility = View.VISIBLE
+                    binding.textViewSearchHistory.visibility = View.VISIBLE
+                } else {
+                    binding.searchHistory.visibility = View.GONE
+                    binding.clearTrackHistory.visibility = View.GONE
+                    binding.textViewSearchHistory.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    private fun hidePlaceholders() {
+        binding.placeholderNoResults.visibility = View.GONE
+        binding.placeholderServerError.visibility = View.GONE
     }
 
     private fun showTrackList() {
@@ -209,6 +225,11 @@ class SearchFragment : Fragment() {
         binding.updateButton.setOnClickListener {
             viewModel.searchTracks(binding.searchString.text.toString())
         }
+    }
+
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.searchString.windowToken, 0)
     }
 
     private fun clickDebounce(action: () -> Unit) {

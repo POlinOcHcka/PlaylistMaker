@@ -103,7 +103,7 @@
         <LinearLayout
             android:id="@+id/placeholderNoResults"
             style="@style/Placeholder"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 style="@style/PlaceholderImageNoResults"/>

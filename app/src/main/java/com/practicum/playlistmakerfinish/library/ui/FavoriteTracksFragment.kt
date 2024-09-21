@@ -61,7 +61,7 @@ class FavoriteTracksFragment : Fragment() {
                 recyclerView.visibility = View.VISIBLE
                 placeholderImage.visibility = View.GONE
                 placeholderText.visibility = View.GONE
-                adapter.setTracks(tracks)
+                adapter.addTracks(tracks)
             }
         }
     }
