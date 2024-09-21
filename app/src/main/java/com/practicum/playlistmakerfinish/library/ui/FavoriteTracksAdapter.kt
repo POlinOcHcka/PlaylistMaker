@@ -18,8 +18,14 @@ class FavoriteTracksAdapter(
 
     private var tracks = listOf<TrackEntity>()
 
-    fun setTracks(tracks: List<TrackEntity>) {
-        this.tracks = tracks
+    fun addTracks(newTracks: List<TrackEntity>) {
+        // Добавляем новые треки в начало текущего списка
+        val updatedTracks = (newTracks + this.tracks).distinctBy { it.trackId }
+
+        // Обновляем список треков
+        this.tracks = updatedTracks
+
+        // Уведомляем адаптер об изменениях
         notifyDataSetChanged()
     }
 

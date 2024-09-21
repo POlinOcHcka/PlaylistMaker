@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="4dp"
+    android:textColor="?attr/colorOnPrimary">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/playlistCover"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/size_16"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/playlistName"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedCornersImage"
+        tools:src="@drawable/placeholder" />
+
+    <TextView
+        android:id="@+id/playlistName"
+        style="@style/NameTrackText"
+        android:layout_marginTop="@dimen/size_4"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingVertical="@dimen/size_2"
+        android:textColor="?attr/colorSecondaryVariant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playlistCover"
+        tools:text="ЗАГОЛОВОК" />
+
+    <TextView
+        android:id="@+id/tracksCount"
+        style="@style/NameTrackText"
+        android:ellipsize="end"
+        android:textColor="?attr/colorSecondaryVariant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playlistName"
+        tools:text="0 треков" />
+</androidx.constraintlayout.widget.ConstraintLayout>

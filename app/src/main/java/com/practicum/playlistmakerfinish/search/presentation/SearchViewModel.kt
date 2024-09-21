@@ -47,8 +47,10 @@ class SearchViewModel(
                     _isLoading.value = false
                     if (tracks.isNotEmpty()) {
                         _searchResults.value = tracks
+                        _showNoResults.value = false // Заглушка не нужна, есть результаты
                     } else {
-                        _showNoResults.value = true
+                        _searchResults.value = emptyList() // Очищаем список результатов
+                        _showNoResults.value = true // Показать заглушку
                     }
                 }
                 .catch { e ->

@@ -9,15 +9,51 @@
         android:id="@+id/searchFragment"
         android:name="com.practicum.playlistmakerfinish.search.ui.SearchFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/libraryFragment"
         android:name="com.practicum.playlistmakerfinish.library.ui.LibraryFragment"
-        android:label="MediatekFragment"
-        tools:layout="@layout/fragment_library" />
+        android:label="LibraryFragment"
+        tools:layout="@layout/fragment_library" >
+        <action
+            android:id="@+id/action_favoriteTracksFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_libraryFragment_to_newPlaylistFragment"
+            app:destination="@id/newPlaylistFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.practicum.playlistmakerfinish.settings.ui.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/newPlaylistFragment"
+        android:name="com.practicum.playlistmakerfinish.library.ui.NewPlaylistFragment"
+        android:label="NewPlaylistFragment"
+        tools:layout="@layout/fragment_new_playlist" />
+
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="com.practicum.playlistmakerfinish.player.ui.PlayerFragment"
+        android:label="PlayerFragment"
+        tools:layout="@layout/fragment_player" >
+        <action
+            android:id="@+id/action_playerFragment_to_newPlaylistFragment"
+            app:destination="@id/newPlaylistFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/FavoriteTracksFragment"
+        android:name="com.practicum.playlistmakerfinish.library.ui.FavoriteTracksFragment"
+        android:label="FavoriteTracksFragment"
+        tools:layout="@layout/fragment_favorite_tracks" >
+    </fragment>
 </navigation>
