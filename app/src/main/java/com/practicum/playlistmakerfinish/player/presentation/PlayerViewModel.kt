@@ -7,18 +7,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmakerfinish.library.db.TrackEntity
 import com.practicum.playlistmakerfinish.library.domain.FavoriteTracksRepository
+import com.practicum.playlistmakerfinish.library.domain.model.Playlist
+import com.practicum.playlistmakerfinish.library.domain.PlaylistsInteractor
 import com.practicum.playlistmakerfinish.player.domain.GetTrackUseCase
-import com.practicum.playlistmakerfinish.player.domain.PlayerTrack
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import com.practicum.playlistmakerfinish.player.domain.model.PlayerTrack
+import com.practicum.playlistmakerfinish.player.ui.TrackInPlaylistState
+import com.practicum.playlistmakerfinish.search.domain.model.Track
+import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 class PlayerViewModel(
     private val getTrackUseCase: GetTrackUseCase,
-    private val favoriteTracksRepository: FavoriteTracksRepository
+    private val favoriteTracksRepository: FavoriteTracksRepository,
+    private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
 
     private val _trackLiveData = MutableLiveData<PlayerTrack?>()
@@ -29,6 +31,12 @@ class PlayerViewModel(
 
     private val _currentTimeLiveData = MutableLiveData<String>()
     val currentTimeLiveData: LiveData<String> get() = _currentTimeLiveData
+
+    private val playlistsLiveData = MutableLiveData<List<Playlist>>()
+    fun observePlaylists(): LiveData<List<Playlist>> = playlistsLiveData
+
+    private val trackInPlaylistLiveData = MutableLiveData<TrackInPlaylistState>()
+    fun observeTrackInPlaylistState(): LiveData<TrackInPlaylistState> = trackInPlaylistLiveData
 
     private var updateJob: Job? = null
 
@@ -82,6 +90,25 @@ class PlayerViewModel(
 
     fun stopUpdatingProgress() {
         updateJob?.cancel()
+    }
+
+    fun getSavedPlaylists() {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistsInteractor.getSavedPlaylists().collect { playlists ->
+                playlistsLiveData.postValue(playlists)
+            }
+        }
+    }
+
+    fun addTracksIdInPlaylist(playlist: Playlist, tracksId: List<Int>, track: Track) {
+        if (track.id in tracksId) {
+            trackInPlaylistLiveData.postValue(TrackInPlaylistState.TrackIsAlreadyInPlaylist(playlist.playlistName))
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                playlistsInteractor.addTracksIdInPlaylist(playlist, tracksId, track)
+            }
+            trackInPlaylistLiveData.postValue(TrackInPlaylistState.TrackAddToPlaylist(playlist.playlistName))
+        }
     }
 }
 

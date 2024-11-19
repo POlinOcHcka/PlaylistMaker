@@ -194,7 +194,7 @@
         <item name="android:textFontWeight">500</item>
     </style>
 
-    <style name="textViewSearchHistory">
+    <style name="Text19">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
@@ -269,6 +269,13 @@
         <item name="tabTextColor">@color/night_text_white</item>
         <item name="tabIndicatorColor">@color/night_text_white</item>
         <item name="android:background">@color/night_background_black</item>
+    </style>
+
+    <style name="TextTrackCount">
+        <item name="android:drawableTint">@color/night_text_white</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
     </style>
 
 </resources>

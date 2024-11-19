@@ -1,19 +1,18 @@
 package com.practicum.playlistmakerfinish.library.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.library.db.TrackEntity
 import com.practicum.playlistmakerfinish.library.presentation.FavoriteTracksViewModel
-import com.practicum.playlistmakerfinish.player.domain.PlayerTrack
-import com.practicum.playlistmakerfinish.player.ui.PlayerActivity
+import com.practicum.playlistmakerfinish.player.domain.model.PlayerTrack
 import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys.SEARCH_HISTORY_KEY
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -62,7 +61,7 @@ class FavoriteTracksFragment : Fragment() {
                 recyclerView.visibility = View.VISIBLE
                 placeholderImage.visibility = View.GONE
                 placeholderText.visibility = View.GONE
-                adapter.setTracks(tracks)
+                adapter.addTracks(tracks)
             }
         }
     }
@@ -81,9 +80,10 @@ class FavoriteTracksFragment : Fragment() {
             previewUrl = track.trackUrl
         )
 
-        val intent = Intent(context, PlayerActivity::class.java).apply {
-            putExtra(SEARCH_HISTORY_KEY, Gson().toJson(playerTrack))
+        val bundle = Bundle().apply {
+            putString(SEARCH_HISTORY_KEY, Gson().toJson(playerTrack))
         }
-        startActivity(intent)
+
+        findNavController().navigate(R.id.action_favoriteTracksFragment_to_playerFragment, bundle)
     }
 }

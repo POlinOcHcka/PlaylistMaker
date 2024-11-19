@@ -61,7 +61,7 @@
 
                 <TextView
                     android:id="@+id/textViewSearchHistory"
-                    style="@style/textViewSearchHistory"
+                    style="@style/Text19"
                     android:text="@string/you_looking_for"
                     android:visibility="visible">
                 </TextView>
@@ -103,7 +103,7 @@
         <LinearLayout
             android:id="@+id/placeholderNoResults"
             style="@style/Placeholder"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 style="@style/PlaceholderImageNoResults"/>
