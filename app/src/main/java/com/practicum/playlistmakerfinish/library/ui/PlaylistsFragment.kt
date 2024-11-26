@@ -8,9 +8,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.gson.Gson
+import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.databinding.FragmentPlaylistsBinding
+import com.practicum.playlistmakerfinish.library.domain.model.IntentKeys.PLAYLIST_ID_KEY
 import com.practicum.playlistmakerfinish.library.domain.model.Playlist
 import com.practicum.playlistmakerfinish.library.presentation.PlaylistsViewModel
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -24,11 +28,12 @@ class PlaylistsFragment : Fragment() {
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
+    private val gson: Gson by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -40,7 +45,7 @@ class PlaylistsFragment : Fragment() {
             render(it)
         }
 
-        adapter = PlaylistAdapter()
+        adapter = PlaylistAdapter { playlist -> openPlaylist(playlist) }
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
@@ -84,5 +89,12 @@ class PlaylistsFragment : Fragment() {
         adapter?.playlists?.clear()
         adapter?.playlists?.addAll(playlists)
         adapter?.notifyDataSetChanged()
+    }
+
+    private fun openPlaylist(playlist: Playlist) {
+        val bundle = Bundle().apply {
+            putString(PLAYLIST_ID_KEY, gson.toJson(playlist))
+        }
+        findNavController().navigate(R.id.action_libraryFragment_to_playlistViewFragment, bundle)
     }
 }

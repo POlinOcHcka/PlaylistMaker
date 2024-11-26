@@ -13,14 +13,19 @@ import com.practicum.playlistmakerfinish.player.domain.GetTrackUseCase
 import com.practicum.playlistmakerfinish.player.domain.model.PlayerTrack
 import com.practicum.playlistmakerfinish.player.ui.TrackInPlaylistState
 import com.practicum.playlistmakerfinish.search.domain.model.Track
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import com.practicum.playlistmakerfinish.library.domain.model.Track as LibraryTrack
 
 class PlayerViewModel(
     private val getTrackUseCase: GetTrackUseCase,
     private val favoriteTracksRepository: FavoriteTracksRepository,
-    private val playlistsInteractor: PlaylistsInteractor
+    private val playlistsInteractor: PlaylistsInteractor,
 ) : ViewModel() {
 
     private val _trackLiveData = MutableLiveData<PlayerTrack?>()
@@ -105,7 +110,7 @@ class PlayerViewModel(
             trackInPlaylistLiveData.postValue(TrackInPlaylistState.TrackIsAlreadyInPlaylist(playlist.playlistName))
         } else {
             viewModelScope.launch(Dispatchers.IO) {
-                playlistsInteractor.addTracksIdInPlaylist(playlist, tracksId, track)
+                playlistsInteractor.addTracksIdInPlaylist(playlist, tracksId, track.toLibraryTrack())
             }
             trackInPlaylistLiveData.postValue(TrackInPlaylistState.TrackAddToPlaylist(playlist.playlistName))
         }
@@ -123,4 +128,18 @@ fun PlayerTrack.toEntity() = TrackEntity(
     country = this.country,
     duration = this.timeMillis.toString(),
     trackUrl = this.previewUrl
+)
+
+fun Track.toLibraryTrack() = LibraryTrack(
+    id = this.id.toInt(),
+    name = this.name,
+    artistName = this.artistName,
+    timeMillis = this.timeMillis,
+    artworkUrl100 = this.artworkUrl100,
+    collectionName = this.collectionName,
+    releaseDate = this.releaseDate,
+    primaryGenreName = this.primaryGenreName,
+    country = this.country,
+    previewUrl = this.previewUrl,
+    isFavorite = this.isFavorite
 )

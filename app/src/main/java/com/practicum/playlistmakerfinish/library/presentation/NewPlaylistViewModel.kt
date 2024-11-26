@@ -9,7 +9,7 @@ import com.practicum.playlistmakerfinish.library.domain.model.Playlist
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NewPlaylistViewModel(
+open class NewPlaylistViewModel(
     private val localStorageInteractor: LocalStorageInteractor,
     private val playlistsInteractor: PlaylistsInteractor
 ) :
@@ -19,8 +19,8 @@ class NewPlaylistViewModel(
     private var playlistDescription: String? = null
     private var uri: String? = null
 
-    fun saveImageToLocalStorage(uri: Uri) {
-        localStorageInteractor.saveImageToLocalStorage(uri)
+    fun saveImageToLocalStorage(uri: Uri): Uri {
+        return localStorageInteractor.saveImageToLocalStorage(uri)
     }
 
     fun createPlaylist() {
@@ -38,15 +38,15 @@ class NewPlaylistViewModel(
         }
     }
 
-    fun setPlaylistName(playlistName: String) {
+    open fun setPlaylistName(playlistName: String) {
         this.playlistName = playlistName
     }
 
-    fun setPlaylistDescroption(playlistDescription: String) {
+    open fun setPlaylistDescroption(playlistDescription: String) {
         this.playlistDescription = playlistDescription
     }
 
-    fun setUri(uri: Uri?) {
+    open fun setUri(uri: Uri?) {
         this.uri = uri?.toString()
     }
 }

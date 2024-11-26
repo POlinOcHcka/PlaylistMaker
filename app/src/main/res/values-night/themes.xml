@@ -36,7 +36,7 @@
     </style>
 
     <style name="SettingsIconShare">
-        <item name="android:background">@color/night_button_black</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:src">@drawable/icon_share_dark_mode</item>
     </style>
 

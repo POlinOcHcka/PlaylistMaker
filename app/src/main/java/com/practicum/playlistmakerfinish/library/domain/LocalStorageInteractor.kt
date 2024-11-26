@@ -4,5 +4,5 @@ import android.net.Uri
 
 interface LocalStorageInteractor {
 
-    fun saveImageToLocalStorage(uri: Uri)
+    fun saveImageToLocalStorage(uri: Uri): Uri
 }

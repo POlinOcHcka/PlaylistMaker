@@ -1,5 +1,6 @@
 package com.practicum.playlistmakerfinish.library.di
 
+import com.google.gson.Gson
 import com.practicum.playlistmakerfinish.library.data.FavoriteTracksRepositoryImpl
 import com.practicum.playlistmakerfinish.library.data.LocalStorageRepositoryImpl
 import com.practicum.playlistmakerfinish.library.data.PlaylistsRepositoryImpl
@@ -13,5 +14,7 @@ val repositoryModule = module {
 
     single<LocalStorageRepository> { LocalStorageRepositoryImpl(get()) }
 
-    single<PlaylistsRepositoty> { PlaylistsRepositoryImpl(get()) }
+    single<PlaylistsRepositoty> { PlaylistsRepositoryImpl(get(), get()) }
+
+    single { Gson() }
 }
