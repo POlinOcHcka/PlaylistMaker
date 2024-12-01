@@ -39,9 +39,11 @@ class PlaylistViewFragment : Fragment() {
     lateinit var confirmDialog: MaterialAlertDialogBuilder
     lateinit var confirmDialogTrack: MaterialAlertDialogBuilder
     private val gson: Gson by inject()
+    private lateinit var currentPlaylist: String
 
     companion object {
         fun newInstance() = PlaylistViewFragment()
+        private const val TAG = "PlaylistViewFragment"
     }
 
     override fun onCreateView(
@@ -55,17 +57,18 @@ class PlaylistViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.overlay.visibility = View.GONE
         val adapter =
             PlaylistTracksAdapter(onTrackClick = { track: Track -> openPlayerWithTrack(track) },
                 onLongTrackClick = { track: Track ->
-                    confirmDialogTrack = MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.remove_track_question))
-                        .setMessage(R.string.remove_track_question)
-                        .setPositiveButton(getString(R.string.yes_option)) { _, _ ->
-                            viewModel.removeTrack(track.id)
-                        }.setNegativeButton(getString(R.string.no_option)) { _, _ ->
-                        }
+                    confirmDialogTrack =
+                        MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.remove_track_question))
+                            .setMessage(R.string.remove_track_question)
+                            .setPositiveButton(getString(R.string.yes_option)) { _, _ ->
+                                viewModel.removeTrack(track.id)
+                                currentPlaylist.let { viewModel.getPlaylist(currentPlaylist) }
+                            }.setNegativeButton(getString(R.string.no_option)) { _, _ ->
+                            }
                     confirmDialogTrack.show()
                     true
                 })
@@ -79,9 +82,12 @@ class PlaylistViewFragment : Fragment() {
 
         viewModel.playlistLiveData.observe(viewLifecycleOwner) { playlist ->
             binding.playlistName.text = playlist.playlistName
-            binding.playlistDescription.text = if (playlist.playlistDescription.isNullOrEmpty()) {
-                "Нет описания"
-            } else playlist.playlistDescription
+            if (playlist.playlistDescription.isNullOrEmpty()) {
+                binding.playlistDescription.visibility = View.GONE
+            } else {
+                binding.playlistDescription.visibility = View.VISIBLE
+                binding.playlistDescription.text = playlist.playlistDescription
+            }
             Glide.with(requireContext()).load(playlist.uri).placeholder(R.drawable.placeholder)
                 .diskCacheStrategy(
                     DiskCacheStrategy.NONE
@@ -92,12 +98,6 @@ class PlaylistViewFragment : Fragment() {
                 ).skipMemoryCache(true).into(binding.playlistImageBottom)
             binding.playlistNameBottom.text = playlist.playlistName
 
-            binding.trackQuantityBottom.text = resources.getQuantityString(
-                R.plurals.tracks, playlist.tracksCount, playlist.tracksCount
-            )
-            binding.tracksQty.text = resources.getQuantityString(
-                R.plurals.tracks, playlist.tracksCount, playlist.tracksCount
-            )
             confirmDialog =
                 MaterialAlertDialogBuilder(requireContext()).setMessage("Хотите удалить плейлист \"${playlist.playlistName}\"?")
                     .setNeutralButton("Нет") { _, _ -> }.setPositiveButton("Да") { _, _ ->
@@ -112,7 +112,13 @@ class PlaylistViewFragment : Fragment() {
             binding.tracksTime.text = resources.getQuantityString(R.plurals.minutes, it.toInt(), it)
         }
         viewModel.trackListLiveData.observe(viewLifecycleOwner) {
-            adapter.addTracks(it)
+            adapter.replaceTracks(it)
+            binding.trackQuantityBottom.text = resources.getQuantityString(
+                R.plurals.tracks, it.size, it.size
+            )
+            binding.tracksQty.text = resources.getQuantityString(
+                R.plurals.tracks, it.size, it.size
+            )
         }
 
 
@@ -174,11 +180,16 @@ class PlaylistViewFragment : Fragment() {
         })
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onResume() {
         super.onResume()
         val value = arguments?.getString(PLAYLIST_ID_KEY)
         value?.let {
             viewModel.getPlaylist(it)
+            currentPlaylist = it
         }
     }
 
@@ -223,8 +234,7 @@ class PlaylistViewFragment : Fragment() {
             putString(PLAYLIST_ID_KEY, gson.toJson(playlist))
         }
         findNavController().navigate(
-            R.id.action_playlistViewFragment_to_editPlaylistFragment,
-            bundle
+            R.id.action_playlistViewFragment_to_editPlaylistFragment, bundle
         )
     }
 }

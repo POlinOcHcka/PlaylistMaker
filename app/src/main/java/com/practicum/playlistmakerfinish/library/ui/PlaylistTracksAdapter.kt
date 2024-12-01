@@ -19,14 +19,8 @@ class PlaylistTracksAdapter(
 
     private var tracks = listOf<Track>()
 
-    fun addTracks(newTracks: List<Track>) {
-        // Добавляем новые треки в начало текущего списка
-        val updatedTracks = (newTracks + this.tracks).distinctBy { it.id }
-
-        // Обновляем список треков
-        this.tracks = updatedTracks
-
-        // Уведомляем адаптер об изменениях
+    fun replaceTracks(newTracks: List<Track>) {
+        this.tracks = newTracks
         notifyDataSetChanged()
     }
 

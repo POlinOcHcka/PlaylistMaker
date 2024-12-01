@@ -10,7 +10,8 @@ import com.practicum.playlistmakerfinish.library.db.AppDatabase
 import com.practicum.playlistmakerfinish.library.domain.PlaylistsRepositoty
 import com.practicum.playlistmakerfinish.library.domain.model.Playlist
 import com.practicum.playlistmakerfinish.library.domain.model.Track
-
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -30,7 +31,7 @@ class PlaylistsRepositoryImpl(private val appDatabase: AppDatabase, private val 
         appDatabase.getTrackInPlaylistDao().insertTrackInPlaylist(track.toTrackInPlaylistEntity())
         val updatedTracksId = tracksId + track.id
         val updatedPlaylist = playlist.copy(
-            tracksIdInPlaylist = updatedTracksId, tracksCount = playlist.tracksCount + 1
+            tracksIdInPlaylist = updatedTracksId, tracksCount = updatedTracksId.size
         )
         appDatabase.getPlaylistDao().updatePlaylist(updatedPlaylist.toPlaylistEntity())
     }
@@ -61,10 +62,10 @@ class PlaylistsRepositoryImpl(private val appDatabase: AppDatabase, private val 
     override suspend fun deletePlaylist(playlist: Playlist) {
         val tracks = playlist.tracksIdInPlaylist
         appDatabase.getPlaylistDao().removePlaylist(playlist.playlistId)
-        val plalists = appDatabase.getPlaylistDao().getSavedPlaylists().first()
+        val playlists = appDatabase.getPlaylistDao().getSavedPlaylists().first()
         for (trackId: Int in tracks) {
             var isExist = false
-            for (playlistOther in plalists) {
+            for (playlistOther in playlists) {
                 if (playlistOther.tracksIdInPlaylist.contains(trackId.toString())) isExist = true
             }
             if (!isExist) appDatabase.getTrackInPlaylistDao().removeTrack(trackId)
@@ -72,15 +73,28 @@ class PlaylistsRepositoryImpl(private val appDatabase: AppDatabase, private val 
     }
 
     override suspend fun removeTrack(playlist: Playlist, trackId: Int) {
-        val plalists = appDatabase.getPlaylistDao().getSavedPlaylists().first()
-        var isExist = false
-        for (playlistOther in plalists) {
-            if (playlistOther.tracksIdInPlaylist.contains(trackId.toString())) isExist = true
+        coroutineScope {
+            async {
+                val playlistDb = appDatabase.getPlaylistDao().getSavedPlaylist(playlist.playlistId)
+                    .map { it.toPlaylist() }.first()
+                val updatedPlaylist = playlist.copy(
+                    tracksIdInPlaylist = playlistDb.tracksIdInPlaylist.filterNot { it == trackId },
+                    tracksCount = playlistDb.tracksIdInPlaylist.filterNot { it == trackId }.size
+                )
+                appDatabase.getPlaylistDao().updatePlaylist(updatedPlaylist.toPlaylistEntity())
+            }.await()
+            async {
+                var isExist = false
+                val playlists = appDatabase.getPlaylistDao().getSavedPlaylists().first()
+                for (playlistOther in playlists) {
+                    if (playlistOther.tracksIdInPlaylist.contains(trackId.toString())) isExist =
+                        true
+                }
+                if (!isExist) appDatabase.getTrackInPlaylistDao().removeTrack(trackId)
+            }.await()
         }
-        if (!isExist) appDatabase.getTrackInPlaylistDao().removeTrack(trackId)
-        val updatedPlaylist = playlist.copy(
-            tracksIdInPlaylist = playlist.tracksIdInPlaylist.filter { it == trackId }, tracksCount = playlist.tracksCount - 1
-        )
-        appDatabase.getPlaylistDao().updatePlaylist(updatedPlaylist.toPlaylistEntity())
+    }
+    private companion object {
+        const val TAG = "PlaylistsRepositoryImpl"
     }
 }

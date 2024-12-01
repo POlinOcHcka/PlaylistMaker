@@ -49,7 +49,7 @@
 
     <style name="SettingsIconShare">
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:src">@drawable/icon_share</item>
+        <item name="android:src">@drawable/icon_share_gray</item>
     </style>
 
     <style name="SettingsIconSupport">

@@ -5,7 +5,6 @@ import com.bumptech.glide.Glide
 import com.practicum.playlistmakerfinish.R
 import com.practicum.playlistmakerfinish.databinding.PlaylistViewBinding
 import com.practicum.playlistmakerfinish.library.domain.model.Playlist
-import com.practicum.playlistmakerfinish.search.domain.model.TrackWord
 
 class PlaylistViewHolder(private val binding: PlaylistViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -13,9 +12,13 @@ class PlaylistViewHolder(private val binding: PlaylistViewBinding) :
     fun bind(playlist: Playlist) {
         with(binding) {
             playlistName.text = playlist.playlistName
-            tracksCount.text = playlist.tracksCount.toString()+" "+TrackWord.getTrackWord(playlist.tracksCount, itemView)
+            tracksCount.text = binding.root.resources.getQuantityString(
+                R.plurals.tracks,
+                playlist.tracksIdInPlaylist.size,
+                playlist.tracksIdInPlaylist.size
+            )
         }
-        Glide.with(itemView).load(playlist.uri).centerCrop()
-            .placeholder(R.drawable.placeholder).into(binding.playlistCover)
+        Glide.with(itemView).load(playlist.uri).centerCrop().placeholder(R.drawable.placeholder)
+            .into(binding.playlistCover)
     }
 }

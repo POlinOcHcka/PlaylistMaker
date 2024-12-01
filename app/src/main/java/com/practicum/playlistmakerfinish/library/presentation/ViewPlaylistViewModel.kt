@@ -11,7 +11,10 @@ import com.practicum.playlistmakerfinish.library.domain.GetPlaylistUseCase
 import com.practicum.playlistmakerfinish.library.domain.PlaylistsInteractor
 import com.practicum.playlistmakerfinish.library.domain.model.Playlist
 import com.practicum.playlistmakerfinish.library.domain.model.Track
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -33,19 +36,21 @@ class ViewPlaylistViewModel(
 
 
     fun getPlaylist(json: String) {
-        val playlist = getPlaylistUseCase.execute(json)
-        Log.d("ViewPlaylistViewModel", playlist.toString())
-        playlist?.let {
-            _playlistLiveData.postValue(it)
-            viewModelScope.launch {
-                playlistInteractor.getTracksInPlaylist(playlist.tracksIdInPlaylist)
-                    .collect { tracks ->
-                        _trackTimeLiveData.postValue(TimeUnit.MILLISECONDS.toMinutes(tracks.map { it.timeMillis }
-                            .sum()))
-                        _trackListLiveData.postValue(tracks)
-                    }
+        val playlistJson = getPlaylistUseCase.execute(json)
+        playlistJson?.let { playlistSaved ->
+            viewModelScope.launch(Dispatchers.IO) {
+                playlistInteractor.getSavedPlaylist(playlistSaved.playlistId).collect { playlist ->
+                    Log.d(TAG, "Tracks in: ${playlist.tracksIdInPlaylist}")
+                    playlistInteractor.getTracksInPlaylist(playlist.tracksIdInPlaylist)
+                        .collect { tracks ->
+                            Log.d(TAG, "Sending tracks ${tracks.map { it.id }} ${tracks.size}")
+                            _trackTimeLiveData.postValue(TimeUnit.MILLISECONDS.toMinutes(tracks.sumOf { it.timeMillis }))
+                            _trackListLiveData.postValue(tracks)
+                            Log.d(TAG, "getUsualPlaylist ${tracks.size} ${tracks.map { it.id }}")
+                            _playlistLiveData.postValue(playlist)
+                        }
+                }
             }
-
         }
     }
 
@@ -70,7 +75,13 @@ class ViewPlaylistViewModel(
                 val localDateTime =
                     Instant.ofEpochMilli(track.timeMillis).atZone(ZoneOffset.UTC).toLocalDateTime()
 
-                sb.appendLine("${index + 1}.${track.artistName} - ${track.name}(${localDateTime.format(formatter)})")
+                sb.appendLine(
+                    "${index + 1}.${track.artistName} - ${track.name}(${
+                        localDateTime.format(
+                            formatter
+                        )
+                    })"
+                )
             }
             return sb.toString()
         }
@@ -78,7 +89,7 @@ class ViewPlaylistViewModel(
     }
 
     fun deletePlaylist() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _playlistLiveData.value?.let {
                 playlistInteractor.deletePlaylist(it)
             }
@@ -86,9 +97,19 @@ class ViewPlaylistViewModel(
     }
 
     fun removeTrack(trackId: Int) {
-        viewModelScope.launch {
-            _playlistLiveData.value?.let {
-                playlistInteractor.removeTrack(it, trackId)
+        viewModelScope.launch(Dispatchers.IO) {
+            _playlistLiveData.value?.let { playlist ->
+                coroutineScope {
+                    playlistInteractor.removeTrack(playlist, trackId)
+                    playlistInteractor.getTracksInPlaylist(playlist.tracksIdInPlaylist)
+                        .collect { tracks ->
+                            Log.d(TAG, "Sending tracks ${tracks.map { it.id }} ${tracks.size}")
+                            _trackTimeLiveData.postValue(TimeUnit.MILLISECONDS.toMinutes(tracks.sumOf { it.timeMillis }))
+                            _trackListLiveData.postValue(tracks)
+                            Log.d(TAG, "getUsualPlaylist ${tracks.size} ${tracks.map { it.id }}")
+                            _playlistLiveData.postValue(playlist)
+                        }
+                }
             }
         }
     }

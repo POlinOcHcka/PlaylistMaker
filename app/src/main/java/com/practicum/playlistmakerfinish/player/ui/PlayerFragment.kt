@@ -1,13 +1,19 @@
 package com.practicum.playlistmakerfinish.player.ui
 
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.view.ViewTreeObserver
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +28,7 @@ import com.practicum.playlistmakerfinish.search.domain.model.IntentKeys.SEARCH_H
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class PlayerFragment : Fragment() {
 
@@ -41,12 +47,15 @@ class PlayerFragment : Fragment() {
     private lateinit var buttonAddTrack: ImageButton
     private lateinit var overlay: View
     private lateinit var newPlaylistButton: Button
+    private lateinit var screen: CoordinatorLayout
+    private lateinit var bottomSheet: LinearLayout
 
     private companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
+        private const val TAG = "PlayerFragment"
     }
 
     private var playerState = STATE_DEFAULT
@@ -61,7 +70,7 @@ class PlayerFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         return inflater.inflate(R.layout.fragment_player, container, false)
     }
@@ -84,6 +93,8 @@ class PlayerFragment : Fragment() {
         buttonAddTrack = view.findViewById(R.id.button_add_track)
         overlay = view.findViewById(R.id.overlay)
         newPlaylistButton = view.findViewById(R.id.newPlaylist)
+        bottomSheet = view.findViewById(R.id.playlistsBottomSheet)
+        screen = view.findViewById(R.id.screen)
 
         overlay.visibility = View.GONE
 
@@ -114,6 +125,7 @@ class PlayerFragment : Fragment() {
         newPlaylistButton.setOnClickListener {
             findNavController().navigate(R.id.action_playerFragment_to_newPlaylistFragment)
         }
+        play.setImageResource(R.drawable.icon_play)
     }
 
     override fun onResume() {
@@ -155,13 +167,13 @@ class PlayerFragment : Fragment() {
     }
 
     private fun updateUI(track: PlayerTrack) {
-        val artworkUrl = track.artworkUrl100?.takeIf { it.isNotBlank() }
-            ?.replaceAfterLast('/', "512x512bb.jpg") ?: ""
+        val artworkUrl =
+            track.artworkUrl100.takeIf { it.isNotBlank() }?.replaceAfterLast('/', "512x512bb.jpg")
+                ?: ""
 
         Glide.with(this)
             .load(artworkUrl.takeIf { it.isNotBlank() } ?: R.drawable.placeholder_player)
-            .placeholder(R.drawable.placeholder_player)
-            .error(R.drawable.placeholder_player)
+            .placeholder(R.drawable.placeholder_player).error(R.drawable.placeholder_player)
             .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.size_16)))
             .into(albumCover)
 
@@ -172,7 +184,6 @@ class PlayerFragment : Fragment() {
         year.text = track.releaseDate.split("-").getOrNull(0) ?: ""
         genre.text = track.primaryGenreName
         country.text = track.country
-        play.setImageResource(R.drawable.icon_play)
 
         updateFavoriteButton(track.isFavorite)
     }
@@ -236,7 +247,7 @@ class PlayerFragment : Fragment() {
 
     private fun showBottomSheet() {
         overlay.visibility = View.VISIBLE
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     private fun hideBottomSheet() {
@@ -250,16 +261,17 @@ class PlayerFragment : Fragment() {
                 viewModel.trackLiveData.value?.let { track ->
                     viewModel.addTracksIdInPlaylist(playlist, tracksIdInPlaylist, track.toTrack())
                 }
-                hideBottomSheet()
             }
         }
 
-        bottomSheetBehavior = BottomSheetBehavior.from(requireView().findViewById(R.id.playlistsBottomSheet))
+        bottomSheetBehavior =
+            BottomSheetBehavior.from(requireView().findViewById(R.id.playlistsBottomSheet))
         requireView().findViewById<RecyclerView>(R.id.recyclerView).adapter = adapter
 
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_HIDDEN) {
                     overlay.visibility = View.GONE
@@ -267,6 +279,19 @@ class PlayerFragment : Fragment() {
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
+        bottomSheet.viewTreeObserver?.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                screen.let {
+                    bottomSheetBehavior.peekHeight = screen.measuredHeight * 2/3
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) view?.viewTreeObserver?.removeOnGlobalLayoutListener(
+                    this
+                )
+                else view?.viewTreeObserver?.removeGlobalOnLayoutListener(this)
+            }
         })
 
         observePlaylists()
@@ -290,11 +315,14 @@ class PlayerFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
 
-            is TrackInPlaylistState.TrackAddToPlaylist -> Toast.makeText(
-                requireContext(),
-                getString(R.string.track_added_now) + " ${state.playlistName}",
-                Toast.LENGTH_SHORT
-            ).show()
+            is TrackInPlaylistState.TrackAddToPlaylist -> {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.track_added_now) + " ${state.playlistName}",
+                    Toast.LENGTH_SHORT
+                ).show()
+                hideBottomSheet()
+            }
         }
     }
 }
