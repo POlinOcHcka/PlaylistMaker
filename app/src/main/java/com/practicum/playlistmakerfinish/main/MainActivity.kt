@@ -2,7 +2,6 @@ package com.practicum.playlistmakerfinish.main
 
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -18,14 +17,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         val navController = navHostFragment.navController
 
         binding.bottomNavigationView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.playerFragment, R.id.newPlaylistFragment -> hideBottomNavigation()
+                R.id.playerFragment, R.id.newPlaylistFragment, R.id.playlistViewFragment, R.id.editPlaylistFragment -> hideBottomNavigation()
                 else -> showBottomNavigation()
             }
         }

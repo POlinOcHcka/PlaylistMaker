@@ -28,7 +28,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(appModule, playerModule, searchModule, settingsModule, libraryModule, dataModule, repositoryModule, presentationModule, playlistsModule, newPlaylistsModule, interactorModule)
+            modules(appModule, playerModule, searchModule, settingsModule, libraryModule, dataModule, repositoryModule, presentationModule, playlistsModule, newPlaylistsModule, interactorModule, editPlaylistModule)
         }
     }
 

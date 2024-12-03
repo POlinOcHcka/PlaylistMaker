@@ -42,4 +42,29 @@
     <string name="settings_subject">Сообщение разработчикам приложения Playlist Maker</string>
     <string name="settings_message">Спасибо разработчикам за крутое приложение!</string>
     <string name="settings_link_offer" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
+
+    <string name="dont_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="edit_playlist">Редактировать</string>
+    <string name="save_button_text">Сохранить</string>
+    <string name="remove_playlist">Удалить плейлист</string>
+    <string name="edit_playlist_button">Редактировать информацию</string>
+    <string name="share_button">Поделиться</string>
+    <string name="remove_track_question">Хотите удалить трек?</string>
+    <string name="yes_option">Да</string>
+    <string name="no_option">Нет</string>
+
+    <plurals name="tracks">
+        <item quantity="zero">Нет треков</item>
+        <item quantity="one">%d трек</item>
+        <item quantity="few">%d трека</item>
+        <item quantity="many">%d треков</item>
+        <item quantity="other">%d треков</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="zero">%d минут</item>
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="other">%d минут</item>
+    </plurals>
 </resources>

@@ -5,7 +5,7 @@ import android.net.Uri
 class LocalStorageInteractorImpl(private val localStorageRepository: LocalStorageRepository) :
     LocalStorageInteractor {
 
-    override fun saveImageToLocalStorage(uri: Uri) {
-        localStorageRepository.saveImageToLocalStorage(uri)
+    override fun saveImageToLocalStorage(uri: Uri): Uri {
+        return localStorageRepository.saveImageToLocalStorage(uri)
     }
 }
